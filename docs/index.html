@@ -112,61 +112,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/raw/Cortison_csv.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read_csv2 für ";" geteilte Tabelle</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cortison_import <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/raw/Cortison_csv.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 2389 Columns: 1
+<pre><code>ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 2389 Columns: 12
 ── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr (1): ProbenID;ProbeWare;ProbeErhebungsdatum;ResultatAnalytnummer;Resulta...
+Delimiter: ";"
+chr (11): ProbenID, ProbeWare, ProbeErhebungsdatum, ResultatAnalytName, Resu...
+dbl  (1): ResultatAnalytnummer
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2,389 × 1
-   ProbenID;ProbeWare;ProbeErhebungsdatum;ResultatAnalytnummer;ResultatAnalytN…¹
-   &lt;chr&gt;                                                                        
- 1 "E330E60;Schwein - Leber;04.07.2019;20725;Cortison;Z4044;\xb5g/kg;\xb135 %;N…
- 2 "E330E84;Schwein - Leber;26.06.2019;20725;Cortison;Z4044;\xb5g/kg;\xb135 %;N…
- 3 "E330E50;Schwein - Leber;19.06.2019;20725;Cortison;Z4044;\xb5g/kg;\xb135 %;N…
- 4 "E330EA4;Schwein - Leber;25.06.2019;20725;Cortison;Z4044;\xb5g/kg;\xb135 %;N…
- 5 "E330E94;Schwein - Leber;18.06.2019;20725;Cortison;Z4044;\xb5g/kg;\xb135 %;N…
- 6 "E32FDE2;Schwein - Leber;01.07.2019;20725;Cortison;Z4044;\xb5g/kg;\xb135 %;N…
- 7 "E330DDE;Schwein - Leber;04.07.2019;20725;Cortison;Z4044;\xb5g/kg;\xb135 %;N…
- 8 "E32FDF2;Schwein - Leber;01.07.2019;20725;Cortison;Z4044;\xb5g/kg;\xb135 %;N…
- 9 "E330DFE;Schwein - Leber;18.06.2019;20725;Cortison;Z4044;\xb5g/kg;\xb135 %;N…
-10 "E330E22;Schwein - Leber;18.06.2019;20725;Cortison;Z4044;\xb5g/kg;\xb135 %;N…
-# ℹ 2,379 more rows
-# ℹ abbreviated name:
-#   ¹​`ProbenID;ProbeWare;ProbeErhebungsdatum;ResultatAnalytnummer;ResultatAnalytName;ResultatMethodencode;ResultatEinheit;ResultatMessunsicherheit;ResultatWiederfindung;ResultatWiederfindungskorrigiert;ResultatTpAufarbeitungName;ResultatResultat`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/raw/Hydrocortison_csv.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hydrocortison_import <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/raw/Hydrocortison_csv.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 2983 Columns: 1
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr (1): ProbenID;ProbeWare;ProbeErhebungsdatum;ResultatAnalytnummer;Resulta...
-
+<pre><code>ℹ Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
+Rows: 2983 Columns: 12── Column specification ────────────────────────────────────────────────────────
+Delimiter: ";"
+chr (11): ProbenID, ProbeWare, ProbeErhebungsdatum, ResultatAnalytName, Resu...
+dbl  (1): ResultatAnalytnummer
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2,983 × 1
-   ProbenID;ProbeWare;ProbeErhebungsdatum;ResultatAnalytnummer;ResultatAnalytN…¹
-   &lt;chr&gt;                                                                        
- 1 "E330E60;Schwein - Leber;04.07.2019;20745;Hydrocortison;Z4044;\xb5g/kg;\xb13…
- 2 "E330E84;Schwein - Leber;26.06.2019;20745;Hydrocortison;Z4044;\xb5g/kg;\xb13…
- 3 "E330E50;Schwein - Leber;19.06.2019;20745;Hydrocortison;Z4044;\xb5g/kg;\xb13…
- 4 "E330EA4;Schwein - Leber;25.06.2019;20745;Hydrocortison;Z4044;\xb5g/kg;\xb13…
- 5 "E330E94;Schwein - Leber;18.06.2019;20745;Hydrocortison;Z4044;\xb5g/kg;\xb13…
- 6 "E32FDE2;Schwein - Leber;01.07.2019;20745;Hydrocortison;Z4044;\xb5g/kg;\xb13…
- 7 "E330DDE;Schwein - Leber;04.07.2019;20745;Hydrocortison;Z4044;\xb5g/kg;\xb13…
- 8 "E32FDF2;Schwein - Leber;01.07.2019;20745;Hydrocortison;Z4044;\xb5g/kg;\xb13…
- 9 "E330DFE;Schwein - Leber;18.06.2019;20745;Hydrocortison;Z4044;\xb5g/kg;\xb13…
-10 "E330DEE;Schwein - Leber;25.06.2019;20745;Hydrocortison;Z4044;\xb5g/kg;\xb13…
-# ℹ 2,973 more rows
-# ℹ abbreviated name:
-#   ¹​`ProbenID;ProbeWare;ProbeErhebungsdatum;ResultatAnalytnummer;ResultatAnalytName;ResultatMethodencode;ResultatEinheit;ResultatMessunsicherheit;ResultatWiederfindung;ResultatWiederfindungskorrigiert;ResultatTpAufarbeitungName;ResultatResultat`</code></pre>
 </div>
 </div>
 <section id="einleitung" class="level1">
@@ -185,6 +154,14 @@ chr (1): ProbenID;ProbeWare;ProbeErhebungsdatum;ResultatAnalytnummer;Resulta...
 </section>
 <section id="datenaufbereitung" class="level1">
 <h1>Datenaufbereitung</h1>
+<p>Daten zusammenführen</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># merge mit all = TRUE um auch Proben mit nur einem Resultat in der Tabelle zu behalten</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>cortison_beide <span class="ot">&lt;-</span> <span class="fu">merge</span>(cortison_import, hydrocortison_import, <span class="at">by=</span><span class="st">"ProbenID"</span>, <span class="at">all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>cortison_newname <span class="ot">&lt;-</span> cortison_beide <span class="sc">|&gt;</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">cortison_conc =</span> ResultatResultat.x) <span class="sc">|&gt;</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">hydrocortison_conc =</span> ResultatResultat.y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="daten-visualisierung" class="level1">
 <h1>Daten Visualisierung</h1>

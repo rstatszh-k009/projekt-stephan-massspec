@@ -9,8 +9,9 @@ library(tidyverse)
 ```
 
 ```{r}
-read_csv(here::here("daten/raw/Cortison_csv.csv"))
-read_csv(here::here("daten/raw/Hydrocortison_csv.csv"))
+# read_csv2 für ";" geteilte Tabelle
+cortison_import <- read_csv2(here::here("daten/raw/Cortison_csv.csv"))
+hydrocortison_import <- read_csv2(here::here("daten/raw/Hydrocortison_csv.csv"))
 ```
 
 # Einleitung
@@ -30,5 +31,16 @@ Gibt es Unterschiede zwischen einzelnen Matrizes? z.B Muskel und Leber
 Gibt es Unterschiede zwischen verschiedenen Tierarten? z.B. Rinder und Schweine
 
 # Datenaufbereitung
+
+Daten zusammenführen
+
+```{r}
+# merge mit all = TRUE um auch Proben mit nur einem Resultat in der Tabelle zu behalten
+cortison_beide <- merge(cortison_import, hydrocortison_import, by="ProbenID", all = TRUE)
+cortison_newname <- cortison_beide |> 
+  rename(cortison_conc = ResultatResultat.x) |> 
+  rename(hydrocortison_conc = ResultatResultat.y)
+
+```
 
 # Daten Visualisierung
