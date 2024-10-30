@@ -32,7 +32,7 @@ Gibt es Unterschiede zwischen verschiedenen Tierarten? z.B. Rinder und Schweine
 
 # Datenaufbereitung
 
-Daten zusammenführen
+Daten zusammenführen und Spaltentietel ändern
 
 ```{r}
 # merge mit all = TRUE um auch Proben mit nur einem Resultat in der Tabelle zu behalten
@@ -43,4 +43,27 @@ cortison_newname <- cortison_beide |>
 
 ```
 
+Datum formatieren
+
+```{r}
+cortison_datum <- mutate(cortison_newname, datum = as_date(ProbeErhebungsdatum.x, format = "%d.%m.%Y")) |> 
+  mutate(cortison_newname, datum2 = as_date(ProbeErhebungsdatum.y, format = "%d.%m.%Y")) |> 
+  mutate(monat = month(datum)) |> 
+  mutate(monat2 = month(datum2))
+```
+
+Tierart von Matrix trennen
+
+```{r}
+cortison_matrix <- mutate(cortison_datum, tierart = strsplit(ProbeWare.x, split = " - "))
+```
+
 # Daten Visualisierung
+
+```{r}
+ggplot(data = cortison_datum,
+       mapping = aes(x = monat,
+                     y = cortison_conc))+
+  geom_point()
+
+```
