@@ -2,6 +2,7 @@
 title: "index"
 format: html
 editor: visual
+author: "Stephan Walker"
 ---
 
 ```{r}
@@ -39,31 +40,48 @@ Daten zusammenführen und Spaltentietel ändern
 cortison_beide <- merge(cortison_import, hydrocortison_import, by="ProbenID", all = TRUE)
 cortison_newname <- cortison_beide |> 
   rename(cortison_conc = ResultatResultat.x) |> 
-  rename(hydrocortison_conc = ResultatResultat.y)
+  rename(hydrocortison_conc = ResultatResultat.y) |> 
+  mutate(cortison_beide, ware = case_when
+         (is_empty(ProbeWare.x) ~ ProbeWare.y,
+          TRUE ~ ProbeWare.x)) |> 
+  mutate(cortison_beide, datum = case_when(
+    is_empty(ProbeErhebungsdatum.x) ~ ProbeErhebungsdatum.y,
+    TRUE ~ ProbeErhebungsdatum.x
+  ))
+
+cortison_datum <-  mutate(cortison_newname, datum_date = as_date(datum, format = "%d.%m.%Y"))
+                          
+cortison_matrix <-  separate(cortison_datum, ware,c("tierart","matrix"))
+
+
 
 ```
 
 Datum formatieren
 
 ```{r}
-cortison_datum <- mutate(cortison_newname, datum = as_date(ProbeErhebungsdatum.x, format = "%d.%m.%Y")) |> 
-  mutate(cortison_newname, datum2 = as_date(ProbeErhebungsdatum.y, format = "%d.%m.%Y")) |> 
-  mutate(monat = month(datum)) |> 
-  mutate(monat2 = month(datum2))
+cortison_datum2 <- mutate(cortison_matrix, monat = month(datum_date))
+jahreszeiten <- c("Frühling","Sommer","Herbst","Winter")
+cortison_datum3 <- mutate(cortison_datum2,
+                          jahreszeit = case_when(
+                            monat == c(3,4,5) ~ "Frühling",
+                            monat == c(6,7,8) ~ "Sommer",
+                            monat == c(9,10,11) ~ "Herbst",
+                            monat == c(1,2,12) ~ "Winter"
+                          ))
 ```
 
-Tierart von Matrix trennen
-
-```{r}
-cortison_matrix <- mutate(cortison_datum, tierart = strsplit(ProbeWare.x, split = " - "))
+```         
 ```
 
 # Daten Visualisierung
 
 ```{r}
-ggplot(data = cortison_datum,
-       mapping = aes(x = monat,
-                     y = cortison_conc))+
+ggplot(data = cortison_datum3,
+       mapping = aes(x = matrix,
+                     y = hydrocortison_conc
+                    
+                     ))+
   geom_point()
 
 ```
