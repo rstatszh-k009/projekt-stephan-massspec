@@ -3,6 +3,8 @@ title: "index"
 format: html
 editor: visual
 author: "Stephan Walker"
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r}
@@ -38,17 +40,19 @@ Daten zusammenführen und Spaltentietel ändern
 ```{r}
 # merge mit all = TRUE um auch Proben mit nur einem Resultat in der Tabelle zu behalten
 cortison_beide <- merge(cortison_import, hydrocortison_import, by="ProbenID", all = TRUE)
-cortison_newname <- cortison_beide |> 
-  rename(cortison_conc = ResultatResultat.x) |> 
-  rename(hydrocortison_conc = ResultatResultat.y) |> 
-  mutate(cortison_beide, ware = case_when
-         (is_empty(ProbeWare.x) ~ ProbeWare.y,
-          TRUE ~ ProbeWare.x)) |> 
-  mutate(cortison_beide, datum = case_when(
-    is_empty(ProbeErhebungsdatum.x) ~ ProbeErhebungsdatum.y,
-    TRUE ~ ProbeErhebungsdatum.x
-  ))
-
+# Konzentrationen als Zahl(numeric)
+cortison_newname <- mutate(cortison_beide,
+                           cortison_conc = as.numeric(ResultatResultat.x)) |> 
+                  mutate(cortison_beide,
+                           hydrocortison_conc = as.numeric(ResultatResultat.y)) |>
+ # ware und datum in einer Spalte auch wenn nur ein Wert gefunden                 
+                   mutate(cortison_beide, ware = case_when
+                         (is_empty(ProbeWare.x) ~ ProbeWare.y,
+                          TRUE ~ ProbeWare.x)) |> 
+                        mutate(cortison_beide, datum = case_when(
+                         is_empty(ProbeErhebungsdatum.x) ~ ProbeErhebungsdatum.y,
+                           TRUE ~ ProbeErhebungsdatum.x))
+# Datum formatieren
 cortison_datum <-  mutate(cortison_newname, datum_date = as_date(datum, format = "%d.%m.%Y"))
                           
 cortison_matrix <-  separate(cortison_datum, ware,c("tierart","matrix"))
@@ -71,7 +75,10 @@ cortison_datum3 <- mutate(cortison_datum2,
                           ))
 ```
 
-```         
+Daten überprüfen
+
+```{r}
+
 ```
 
 # Daten Visualisierung
@@ -79,9 +86,9 @@ cortison_datum3 <- mutate(cortison_datum2,
 ```{r}
 ggplot(data = cortison_datum3,
        mapping = aes(x = matrix,
-                     y = hydrocortison_conc
+                     y = cortison_conc
                     
                      ))+
-  geom_point()
+  geom_boxplot()
 
 ```
