@@ -35,7 +35,7 @@ Gibt es Unterschiede zwischen verschiedenen Tierarten? z.B. Rinder und Schweine
 
 # Datenaufbereitung
 
-Daten zusammenführen und Spaltentietel ändern
+Daten zusammenführen und Spaltentitel ändern
 
 ```{r}
 # merge mit all = TRUE um auch Proben mit nur einem Resultat in der Tabelle zu behalten
@@ -75,6 +75,14 @@ cortison_datum3 <- mutate(cortison_datum2,
                           ))
 ```
 
+Untergruppen erstellen
+
+```{r}
+leber <- filter(cortison_datum3, matrix == "Leber")
+niere <- filter(cortison_datum3, matrix == "Niere")
+muskel <- filter(cortison_datum3, matrix == "Muskel")
+```
+
 Daten überprüfen
 
 ```{r}
@@ -91,4 +99,27 @@ ggplot(data = cortison_datum3,
                      ))+
   geom_boxplot()
 
+```
+
+Nach Tierart
+
+```{r}
+ggplot(data = muskel,
+       mapping = aes(x = cortison_conc,
+                     y = hydrocortison_conc,
+                     color = tierart))+
+  geom_point()
+```
+
+Tabelle Muskel
+
+```{r}
+group_by(muskel, tierart) |> 
+  summarise(n(),
+            mean(cortison_conc), 
+            min(cortison_conc), 
+            max(cortison_conc), 
+            mean(hydrocortison_conc),
+            min(hydrocortison_conc),
+            max(hydrocortison_conc))
 ```
