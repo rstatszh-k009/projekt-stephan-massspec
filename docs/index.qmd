@@ -44,35 +44,78 @@ cortison_beide <- merge(cortison_import, hydrocortison_import, by="ProbenID", al
 cortison_newname <- mutate(cortison_beide,
                            cortison_conc = as.numeric(ResultatResultat.x)) |> 
                   mutate(cortison_beide,
-                           hydrocortison_conc = as.numeric(ResultatResultat.y)) |>
+                           hydrocortison_conc = as.numeric(ResultatResultat.y))
  # ware und datum in einer Spalte auch wenn nur ein Wert gefunden                 
-                   mutate(cortison_beide, ware = case_when
-                         (is_empty(ProbeWare.x) ~ ProbeWare.y,
-                          TRUE ~ ProbeWare.x)) |> 
-                        mutate(cortison_beide, datum = case_when(
-                         is_empty(ProbeErhebungsdatum.x) ~ ProbeErhebungsdatum.y,
-                           TRUE ~ ProbeErhebungsdatum.x))
+cortison_ware <- cortison_newname |> 
+  mutate(ware = case_when(
+    ProbeWare.x == is.character(ProbeWare.x) ~ ProbeWare.x,
+    .default = ProbeWare.y
+  ))
+
+cortison_ware |> 
+  count(ware)
+                 
+cortison_datum <- cortison_ware |> 
+  mutate(datum = case_when(
+    ProbeErhebungsdatum.x == is.character(ProbeErhebungsdatum.x) ~ ProbeErhebungsdatum.x,
+    .default = ProbeErhebungsdatum.y
+  ))
+
+cortison_datum |> 
+  count(datum)
+
+
 # Datum formatieren
-cortison_datum <-  mutate(cortison_newname, datum_date = as_date(datum, format = "%d.%m.%Y"))
+cortison_datum2 <-  mutate(cortison_datum, datum_date = as_date(datum, format = "%d.%m.%Y"))
                           
-cortison_matrix <-  separate(cortison_datum, ware,c("tierart","matrix"))
+cortison_matrix <-  separate(cortison_datum2, ware,c("tierart","matrix"))
 
 
+cortison_matrix |> 
+  count(matrix)
 
+```
+
+```{r}
+cortison_matrix2 <- cortison_matrix |> 
+  mutate(matrix = case_when(
+    matrix == "But" ~ "Blut",
+    .default = matrix)) |> 
+  mutate(matrix = case_when(
+    matrix == "Urin" ~ "Harn",
+    .default = matrix)) |> 
+  mutate(tierart = case_when(
+    tierart == "Schweine"~"Schwein",
+    .default = tierart)
+  )
+
+cortison_matrix2 |> 
+  count(matrix)
+
+cortison_matrix2 |> 
+  count(tierart)
 ```
 
 Datum formatieren
 
 ```{r}
-cortison_datum2 <- mutate(cortison_matrix, monat = month(datum_date))
+cortison_datum3 <- mutate(cortison_matrix2, monat = month(datum_date))
 jahreszeiten <- c("Frühling","Sommer","Herbst","Winter")
-cortison_datum3 <- mutate(cortison_datum2,
+cortison_datum4 <- mutate(cortison_datum3,
                           jahreszeit = case_when(
                             monat == c(3,4,5) ~ "Frühling",
                             monat == c(6,7,8) ~ "Sommer",
                             monat == c(9,10,11) ~ "Herbst",
                             monat == c(1,2,12) ~ "Winter"
                           ))
+
+
+
+cortison_datum4 |> 
+  count(matrix)
+
+cortison_datum4 |> 
+  count(matrix)
 ```
 
 Untergruppen erstellen

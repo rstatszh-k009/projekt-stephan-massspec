@@ -169,14 +169,7 @@ dbl  (1): ResultatAnalytnummer
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>cortison_newname <span class="ot">&lt;-</span> <span class="fu">mutate</span>(cortison_beide,</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">cortison_conc =</span> <span class="fu">as.numeric</span>(ResultatResultat.x)) <span class="sc">|&gt;</span> </span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(cortison_beide,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                           <span class="at">hydrocortison_conc =</span> <span class="fu">as.numeric</span>(ResultatResultat.y)) <span class="sc">|&gt;</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a> <span class="co"># ware und datum in einer Spalte auch wenn nur ein Wert gefunden                 </span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">mutate</span>(cortison_beide, <span class="at">ware =</span> case_when</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                         (<span class="fu">is_empty</span>(ProbeWare.x) <span class="sc">~</span> ProbeWare.y,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                          <span class="cn">TRUE</span> <span class="sc">~</span> ProbeWare.x)) <span class="sc">|&gt;</span> </span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mutate</span>(cortison_beide, <span class="at">datum =</span> <span class="fu">case_when</span>(</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">is_empty</span>(ProbeErhebungsdatum.x) <span class="sc">~</span> ProbeErhebungsdatum.y,</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                           <span class="cn">TRUE</span> <span class="sc">~</span> ProbeErhebungsdatum.x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                           <span class="at">hydrocortison_conc =</span> <span class="fu">as.numeric</span>(ResultatResultat.y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: There was 1 warning in `mutate()`.
 ℹ In argument: `cortison_conc = as.numeric(ResultatResultat.x)`.
@@ -189,39 +182,757 @@ Caused by warning:
 Caused by warning:
 ! NAs introduced by coercion</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datum formatieren</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cortison_datum <span class="ot">&lt;-</span>  <span class="fu">mutate</span>(cortison_newname, <span class="at">datum_date =</span> <span class="fu">as_date</span>(datum, <span class="at">format =</span> <span class="st">"%d.%m.%Y"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># ware und datum in einer Spalte auch wenn nur ein Wert gefunden                 </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cortison_ware <span class="ot">&lt;-</span> cortison_newname <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ware =</span> <span class="fu">case_when</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    ProbeWare.x <span class="sc">==</span> <span class="fu">is.character</span>(ProbeWare.x) <span class="sc">~</span> ProbeWare.x,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.default =</span> ProbeWare.y</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>cortison_ware <span class="sc">|&gt;</span> </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ware)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                    ware   n
+1                            Blut - Kalb   1
+2                             Blut - Kuh   1
+3                     Damhirsch - Muskel   2
+4                         Fisch - Muskel  12
+5                          Fisch -Muskel   2
+6  Gehege- oder Zuchtschalenwild - Leber   1
+7                           Huhn - Leber  51
+8                           Kalb -  Blut   1
+9                            Kalb - Blut 125
+10                           Kalb - Harn 140
+11                          Kalb - Leber  35
+12                         Kalb - Muskel 104
+13                          Kalb - Niere   3
+14                         Kalb - Plasma   5
+15                           Kalb - Urin   5
+16                            Kalb- Blut   1
+17                           Kalb- Leber   1
+18                          Kalb- Muskel   2
+19                             Kalb-Blut   1
+20                          Kalbsfleisch   1
+21                     Kaninchen - Leber   5
+22                    Kaninchen - Muskel   1
+23                            Kuh - Blut 353
+24                             Kuh - But   3
+25                            Kuh - Harn 143
+26                           Kuh - Leber  73
+27                          Kuh - Muskel 148
+28                           Kuh - Niere  14
+29                          Kuh - Plasma  23
+30                            Kuh - Urin   7
+31                             Kuh -Blut   2
+32                             Kuh- Blut   1
+33                            Kuh- Leber   1
+34                           Kuh- Muskel   1
+35                              Kuh-Blut   3
+36                       Milchkuh - Blut   2
+37                           Muni - Harn   5
+38                          Muni - Leber   5
+39                         Muni - Muskel   5
+40                           Ochs - Harn   1
+41                         Ochs - Muskel   1
+42                          Ochse - Harn   2
+43                         Ochse - Leber   1
+44                         Pferd - Leber   5
+45                           Rind - Blut 225
+46                           Rind - Harn 219
+47            Rind - Kalb - Kuh - Muskel   1
+48                          Rind - Leber  89
+49                         Rind - Muskel 167
+50                          Rind - Niere  14
+51                         Rind - Plasma   7
+52                           Rind - Urin  12
+53                            Rind -Blut   2
+54              Rind / Kalb / Kuh - Blut   2
+55              Rind / Kalb / Kuh - Harn   1
+56             Rind / Kalb / Kuh - Leber   2
+57              Rind / Kalb / Kuh - Urin   1
+58                Rind Kalb Kuh  - Leber   1
+59                 Rind Kalb Kuh - Leber   1
+60                            Rind- Blut   1
+61                           Rind- Leber   2
+62                          Rind- Muskel   4
+63                             Rind-Blut   3
+64                  Rind/Kalb/Kuh - Blut  13
+65                  Rind/Kalb/Kuh - Harn   7
+66                 Rind/Kalb/Kuh - Leber   5
+67                Rind/Kalb/Kuh - Muskel   5
+68                 Rind/Kalb/Kuh - Niere   2
+69                Rind/Kalb/Kuh - Plasma   3
+70                   Rind/Kalb/Kuh- Blut   1
+71                         Schaf - Leber  11
+72                        Schaf - Muskel  32
+73                        Schafe - Leber   6
+74                       Schafe - Muskel   5
+75                        Schafe - Niere   2
+76                    Schwein - D\xe4rme   1
+77                        Schwein - Harn 170
+78                       Schwein - Leber  91
+79                      Schwein - Muskel 511
+80                       Schwein - Niere  19
+81                     Schweine - Muskel   8
+82                          Stier - Blut   1
+83                          Stier - Harn   3
+84                      Truthahn - Leber   4
+85                         Ziege - Leber   4
+86                        Ziege - Muskel   3
+87                        Ziegen - Leber   1
+88                       Ziegen - Muskel   3
+89                     Zuchtwild - Leber   4
+90                    Zuchtwild - Muskel  12
+91                     Zuchtwild - Niere   3
+92                                  &lt;NA&gt;  19</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cortison_datum <span class="ot">&lt;-</span> cortison_ware <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">datum =</span> <span class="fu">case_when</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    ProbeErhebungsdatum.x <span class="sc">==</span> <span class="fu">is.character</span>(ProbeErhebungsdatum.x) <span class="sc">~</span> ProbeErhebungsdatum.x,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.default =</span> ProbeErhebungsdatum.y</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>cortison_datum <span class="sc">|&gt;</span> </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(datum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  datum  n
+1            01.02.2021  5
+2            01.02.2024  6
+3            01.03.2023 10
+4            01.07.2019  2
+5            01.07.2021  2
+6            01.07.2022  1
+7            01.07.2024  5
+8            01.09.2021  3
+9            01.11.2021  2
+10           01.11.2022 15
+11           02.02.2021  6
+12           02.02.2023  1
+13           02.03.2020  5
+14           02.03.2023  6
+15           02.04.2020  6
+16           02.04.2022  1
+17           02.04.2024 38
+18           02.05.2022  2
+19           02.05.2023  7
+20           02.05.2024  1
+21           02.06.2021  1
+22           02.06.2022  3
+23           02.08.2021  8
+24           02.09.2019 23
+25           02.09.2021  6
+26           02.09.2024 22
+27           02.10.2023 11
+28           02.11.2020 11
+29           02.11.2021  1
+30           02.12.2020  1
+31           03.01.2023  6
+32           03.02.2022  2
+33           03.04.2021  6
+34           03.04.2023  2
+35           03.04.2024  1
+36           03.05.2021 10
+37           03.05.2022  3
+38           03.06.2020  2
+39           03.06.2021  2
+40           03.06.2024 23
+41           03.07.2024  6
+42           03.09.2019  4
+43           03.09.2021  1
+44           03.09.2024  3
+45           03.10.2019  3
+46           03.10.2022 16
+47           03.10.2023 23
+48           03.11.2020  3
+49           04.03.2020  3
+50           04.03.2024 21
+51           04.04.2022  7
+52           04.05.2020 10
+53           04.05.2021  3
+54           04.05.2023  4
+55           04.06.2020  4
+56           04.06.2024 15
+57           04.07.2019  3
+58           04.07.2022  5
+59           04.07.2024  2
+60           04.08.2022  2
+61           04.08.2023  1
+62           04.09.2021  1
+63           04.09.2023  6
+64           04.09.2024 16
+65           04.10.2019  2
+66           04.10.2023  2
+67           04.11.2019  4
+68           04.11.2020  8
+69           04.11.2021  3
+70           04.12.2023  2
+71           05.01.2022  8
+72           05.01.2023  2
+73           05.02.2024 34
+74           05.03.2020  2
+75           05.03.2024  6
+76           05.04.2021  1
+77           05.04.2023 19
+78           05.05.2020  1
+79           05.05.2022  2
+80           05.07.2021  7
+81           05.07.2024  1
+82           05.08.2020  3
+83           05.08.2024 20
+84           05.09.2022 18
+85           05.09.2023  7
+86           05.10.2022  1
+87           05.10.2023  2
+88           05.11.2019  1
+89           05.11.2020 14
+90           06.01.2022 12
+91           06.02.2023 29
+92           06.02.2024 19
+93           06.03.2020  2
+94           06.03.2023  9
+95           06.03.2024  6
+96           06.04.2020  7
+97           06.04.2021  2
+98           06.05.2021  1
+99           06.05.2024 19
+100          06.06.2020  1
+101          06.06.2023  1
+102          06.07.2021  1
+103          06.07.2022  1
+104          06.08.2020  5
+105          06.08.2024 31
+106          06.09.2021 10
+107          06.09.2022  4
+108          06.09.2023  7
+109          06.09.2024  1
+110          06.10.2021  1
+111          06.11.2019  1
+112          06.11.2020 11
+113          06.11.2023  8
+114          07.01.2021  1
+115          07.02.2024  1
+116          07.03.2022  5
+117          07.03.2023  3
+118          07.03.2024  5
+119          07.04.2022  9
+120          07.05.2024 18
+121          07.06.2021  9
+122          07.06.2022  8
+123          07.06.2024  1
+124          07.07.2020  2
+125          07.07.2021  1
+126          07.08.2020  3
+127          07.08.2023  5
+128          07.11.2019  4
+129          07.11.2022  4
+130          07.11.2023  2
+131          07.12.2020 15
+132          08.01.2024 41
+133          08.02.2023  1
+134          08.02.2024 12
+135          08.03.2021  5
+136          08.03.2023  6
+137          08.03.2024  1
+138          08.04.2021  1
+139          08.06.2020  2
+140          08.06.2021  1
+141          08.07.2022  2
+142          08.07.2024  8
+143          08.08.2022  5
+144          08.08.2023 17
+145          08.08.2024  1
+146          08.09.2023  2
+147          08.10.2020  2
+148          08.11.2019  2
+149          08.11.2021 10
+150          09.01.2020  5
+151          09.01.2023 17
+152          09.01.2024  1
+153          09.02.2023  8
+154          09.02.2024  2
+155          09.03.2020  1
+156          09.03.2021  1
+157          09.03.2023  9
+158          09.04.2024  1
+159          09.05.2022  9
+160          09.05.2023  5
+161          09.07.2019  3
+162          09.07.2020  1
+163          09.08.2022  1
+164          09.08.2024  4
+165          09.09.2021  2
+166          09.09.2024  5
+167          09.10.2023 39
+168          09.11.2022  1
+169          09.11.2023  3
+170          10.01.2020  6
+171          10.01.2023 21
+172          10.01.2024  4
+173          10.02.2020  5
+174          10.03.2023  2
+175          10.04.2024  2
+176          10.05.2021  1
+177          10.05.2022  2
+178          10.06.2021  2
+179          10.06.2024  2
+180          10.07.2020  3
+181          10.07.2023  2
+182          10.08.2020  5
+183          10.08.2022  3
+184          10.09.2020  5
+185          10.09.2021  1
+186          10.09.2024 25
+187          10.10.2019 10
+188          10.10.2022  1
+189          10.10.2023 11
+190          10.11.2021  5
+191          11.01.2021  6
+192          11.01.2024 13
+193          11.02.2021  5
+194          11.03.2021  3
+195          11.03.2024  9
+196          11.04.2023  8
+197          11.04.2024  3
+198          11.05.2020  6
+199          11.05.2022  2
+200          11.05.2023  6
+201          11.06.2020  1
+202          11.06.2024  7
+203          11.07.2019  5
+204          11.07.2022  7
+205          11.07.2024  6
+206          11.08.2020  7
+207          11.09.2023  2
+208          11.09.2024 11
+209          11.10.2023  1
+210          11.11.2019  4
+211          11.11.2022  2
+212          11.12.2023  4
+213          12.01.2023 12
+214          12.02.2020  3
+215          12.02.2024 27
+216          12.03.2024  3
+217          12.04.2021  5
+218          12.05.2020  1
+219          12.05.2022  2
+220          12.06.2020  1
+221          12.06.2023 19
+222          12.07.2019  4
+223          12.07.2021  5
+224          12.08.2020  5
+225          12.08.2024  2
+226          12.09.2023  3
+227          12.10.2020 10
+228          12.10.2021  1
+229          12.10.2023  4
+230          12.11.2019  6
+231          12.12.2023  2
+232          13.01.2020 14
+233          13.01.2022  5
+234          13.02.2020  3
+235          13.02.2023 13
+236          13.02.2024 10
+237          13.03.2023  8
+238          13.03.2024 18
+239          13.04.2021  1
+240          13.04.2023  6
+241          13.05.2020  1
+242          13.05.2024  2
+243          13.06.2022 11
+244          13.06.2024  3
+245          13.07.2020  2
+246          13.07.2023  2
+247          13.08.2020  1
+248          13.08.2024 12
+249          13.09.2021 21
+250          13.12.2019  9
+251          14.01.2021  6
+252          14.02.2022 12
+253          14.02.2024  4
+254          14.03.2022  6
+255          14.03.2023  1
+256          14.03.2024  4
+257          14.05.2021  3
+258          14.06.2021 10
+259          14.06.2024  1
+260          14.07.2020  3
+261          14.08.2020  5
+262          14.08.2023  3
+263          14.08.2024  1
+264          14.09.2022  4
+265          14.09.2024  4
+266          14.10.2019  3
+267          14.11.2019 24
+268          14.11.2022  4
+269          15.01.2024  1
+270          15.02.2021  6
+271          15.02.2022  4
+272          15.02.2023  3
+273          15.02.2024  8
+274          15.03.2021 11
+275          15.03.2024  1
+276          15.04.2024 27
+277          15.05.2024 10
+278          15.06.2020 18
+279          15.06.2021  2
+280          15.07.2019  4
+281          15.07.2024  5
+282          15.08.2024 10
+283          15.09.2023  2
+284          15.10.2019  4
+285          15.11.2021  5
+286          15.11.2022  1
+287          16.01.2023 24
+288          16.01.2024  4
+289          16.02.2023  1
+290          16.03.2020  7
+291          16.04.2021  1
+292          16.04.2024  5
+293          16.05.2022  4
+294          16.07.2019  2
+295          16.07.2020  2
+296          16.07.2024  1
+297          16.08.2021 18
+298          16.08.2022  5
+299          16.09.2019 21
+300          16.09.2024  1
+301          16.10.2019 22
+302          16.10.2023  3
+303          16.11.2020  6
+304          17.01.2022  2
+305          17.01.2023  5
+306          17.01.2024  1
+307          17.02.2020  2
+308          17.02.2022  3
+309          17.02.2023  1
+310          17.03.2020  1
+311          17.04.2021  2
+312          17.04.2023  3
+313          17.04.2024  2
+314          17.05.2021  2
+315          17.05.2022  6
+316          17.07.2020  4
+317          17.07.2023 13
+318          17.08.2021  2
+319          17.09.2024  2
+320          17.10.2019  2
+321          17.10.2022  3
+322          17.10.2023  3
+323          18.01.2021  3
+324          18.01.2023  3
+325          18.01.2024 10
+326          18.03.2021  7
+327          18.03.2024  4
+328          18.04.2020  3
+329          18.04.2022  3
+330          18.04.2024 20
+331          18.05.2022  2
+332          18.06.2019  3
+333          18.06.2020  1
+334          18.06.2021  2
+335          18.07.2019  5
+336          18.07.2022  3
+337          18.07.2023  3
+338          18.07.2024  7
+339          18.08.2022  5
+340          18.09.2023  9
+341          18.09.2024  3
+342          18.10.2019  1
+343          18.10.2021 21
+344          18.10.2023  3
+345          18.11.2021 20
+346          19.01.2021  5
+347          19.01.2024  1
+348          19.02.2020  5
+349          19.02.2024 14
+350          19.03.2020  1
+351          19.03.2024  5
+352          19.04.2021  1
+353          19.04.2022  3
+354          19.05.2020 10
+355          19.05.2022  4
+356          19.06.2019  1
+357          19.07.2021  2
+358          19.08.2022  5
+359          19.08.2024  7
+360          19.10.2019  2
+361          19.10.2022  3
+362          19.11.2019  5
+363          19.11.2020  1
+364          20.01.2020  3
+365          20.01.2022  1
+366          20.02.2023 17
+367          20.02.2024  4
+368          20.03.2023 10
+369          20.03.2024  3
+370          20.04.2020  5
+371          20.04.2022  1
+372          20.06.2022  3
+373          20.09.2021  5
+374          20.09.2023  2
+375          20.09.2024  7
+376          20.11.2023  2
+377          21.01.2020  2
+378          21.01.2022  4
+379          21.02.2023  7
+380          21.02.2024  2
+381          21.03.2023  9
+382          21.03.2024  4
+383          21.04.2020  1
+384          21.04.2021  3
+385          21.05.2024 13
+386          21.06.2021  7
+387          21.06.2022  4
+388          21.07.2021  2
+389          21.07.2023  1
+390          21.08.2019  2
+391          21.08.2023  5
+392          21.08.2024  1
+393          21.09.2020 23
+394          21.11.2022  3
+395          21.11.2023  3
+396          22.01.2020  2
+397          22.01.2024  2
+398          22.02.2021  6
+399          22.02.2022  5
+400          22.02.2023  2
+401          22.03.2023  1
+402          22.03.2024  5
+403          22.04.2021  1
+404          22.04.2024  4
+405          22.06.2020  1
+406          22.07.2021  2
+407          22.07.2024  1
+408          22.10.2020  2
+409          22.11.2022  1
+410          22.11.2023  6
+411          23.02.2023  3
+412          23.03.2020  4
+413          23.03.2023  4
+414          23.04.2024  5
+415          23.05.2022  1
+416          23.06.2022  3
+417          23.07.2020  4
+418          23.08.2021  2
+419          23.09.2024  5
+420          23.11.2023  7
+421          24.01.2022 11
+422          24.01.2024  6
+423          24.02.2020  1
+424          24.03.2020  4
+425          24.03.2022  3
+426          24.04.2024  3
+427          24.05.2021  2
+428          24.05.2022  9
+429          24.06.2021  2
+430          24.06.2022  2
+431          24.07.2023  8
+432          24.07.2024  6
+433          24.08.2020  8
+434          24.09.2024  3
+435          24.10.2022  8
+436          24.10.2023 22
+437          24.11.2022  3
+438          25.01.2022  2
+439          25.01.2023  2
+440          25.01.2024  9
+441          25.02.2021  8
+442          25.02.2023  1
+443          25.03.2024  4
+444          25.04.2022  5
+445          25.04.2024  9
+446          25.05.2020  3
+447          25.05.2021 12
+448          25.05.2023  4
+449          25.06.2019  3
+450          25.06.2021  2
+451          25.07.2022  2
+452          25.07.2023  2
+453          25.07.2024  1
+454          25.08.2022  6
+455 25.10.0202 00:00:00 10
+456          25.10.2022  1
+457          26.01.2023  3
+458          26.02.2024 10
+459          26.03.2020  2
+460          26.03.2024 12
+461          26.04.2024  1
+462          26.05.2020  2
+463          26.05.2021  2
+464          26.06.2019  1
+465          26.06.2023  8
+466          26.08.2021  1
+467          26.08.2024  1
+468          26.09.2022  5
+469          26.09.2023  4
+470          26.09.2024  2
+471          26.10.2020 20
+472          27.01.2020  1
+473          27.01.2021 26
+474          27.02.2023  9
+475          27.02.2024  4
+476          27.03.2023 25
+477          27.03.2024  6
+478          27.05.2021  2
+479          27.07.2020  4
+480          27.07.2021  1
+481          27.08.2019  3
+482          27.09.2024  3
+483          27.10.2021  5
+484          27.10.2023  7
+485          27.11.2020  5
+486          27.11.2023  1
+487          28.01.2020 14
+488          28.02.2023  2
+489          28.02.2024  4
+490          28.03.2024  4
+491          28.04.2022  2
+492          28.05.2020  4
+493          28.06.2021  6
+494          28.07.2022  2
+495          28.08.2019  2
+496          28.08.2023  5
+497          28.09.2023  4
+498          28.10.2022  4
+499          29.01.2024  4
+500          29.02.2024  5
+501          29.03.2023  2
+502          29.04.2020  2
+503          29.04.2024 11
+504          29.06.2020  6
+505          29.07.2020  3
+506          29.08.2024  1
+507          29.09.2020  3
+508          29.09.2021  3
+509          29.09.2023  1
+510          29.10.2021  3
+511          30.01.2023 11
+512          30.01.2024  1
+513          30.06.2020  3
+514          30.07.2019  3
+515          30.11.2020  5
+516          30.11.2023  2
+517          31.01.2022  4
+518          31.01.2023  4
+519          31.01.2024  1
+520          31.03.2020  1
+521          31.05.2021  4
+522          31.05.2022  2
+523          31.07.2023  2
+524          31.10.2019  2
+525          31.10.2022  3
+526                &lt;NA&gt; 19</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datum formatieren</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>cortison_datum2 <span class="ot">&lt;-</span>  <span class="fu">mutate</span>(cortison_datum, <span class="at">datum_date =</span> <span class="fu">as_date</span>(datum, <span class="at">format =</span> <span class="st">"%d.%m.%Y"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: There was 1 warning in `mutate()`.
 ℹ In argument: `datum_date = as_date(datum, format = "%d.%m.%Y")`.
 Caused by warning:
 !  10 failed to parse.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cortison_matrix <span class="ot">&lt;-</span>  <span class="fu">separate</span>(cortison_datum, ware,<span class="fu">c</span>(<span class="st">"tierart"</span>,<span class="st">"matrix"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>cortison_matrix <span class="ot">&lt;-</span>  <span class="fu">separate</span>(cortison_datum2, ware,<span class="fu">c</span>(<span class="st">"tierart"</span>,<span class="st">"matrix"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in gregexpr(pattern, x, perl = TRUE): input string 1842 is invalid
 UTF-8</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Expected 2 pieces. Additional pieces discarded in 36 rows [147, 198, 214, 288,
+<pre><code>Warning: Expected 2 pieces. Additional pieces discarded in 46 rows [147, 198, 214, 288,
 294, 340, 355, 356, 388, 390, 475, 595, 684, 722, 742, 761, 762, 1116, 1117,
 1130, ...].</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Expected 2 pieces. Missing pieces filled with `NA` in 1 rows [1842].</code></pre>
+<pre><code>Warning: Expected 2 pieces. Missing pieces filled with `NA` in 2 rows [1842,
+2109].</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cortison_matrix <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   matrix    n
+1    Blut  721
+2     But    3
+3    Harn  683
+4    Kalb   46
+5     Kuh    1
+6   Leber  389
+7  Muskel 1023
+8   Niere   55
+9  Plasma   35
+10   Urin   24
+11   oder    1
+12   &lt;NA&gt;   21</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>cortison_matrix2 <span class="ot">&lt;-</span> cortison_matrix <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">matrix =</span> <span class="fu">case_when</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    matrix <span class="sc">==</span> <span class="st">"But"</span> <span class="sc">~</span> <span class="st">"Blut"</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.default =</span> matrix)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">matrix =</span> <span class="fu">case_when</span>(</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    matrix <span class="sc">==</span> <span class="st">"Urin"</span> <span class="sc">~</span> <span class="st">"Harn"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">.default =</span> matrix)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tierart =</span> <span class="fu">case_when</span>(</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    tierart <span class="sc">==</span> <span class="st">"Schweine"</span><span class="sc">~</span><span class="st">"Schwein"</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">.default =</span> tierart)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>cortison_matrix2 <span class="sc">|&gt;</span> </span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   matrix    n
+1    Blut  724
+2    Harn  707
+3    Kalb   46
+4     Kuh    1
+5   Leber  389
+6  Muskel 1023
+7   Niere   55
+8  Plasma   35
+9    oder    1
+10   &lt;NA&gt;   21</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cortison_matrix2 <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(tierart)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              tierart   n
+1                Blut   2
+2           Damhirsch   2
+3               Fisch  14
+4              Gehege   1
+5                Huhn  51
+6                Kalb 423
+7        Kalbsfleisch   1
+8           Kaninchen   6
+9                 Kuh 772
+10           Milchkuh   2
+11               Muni  15
+12               Ochs   2
+13              Ochse   3
+14              Pferd   5
+15               Rind 790
+16              Schaf  43
+17             Schafe  13
+18            Schwein 799
+19 Schwein - D\xe4rme   1
+20              Stier   4
+21           Truthahn   4
+22              Ziege   7
+23             Ziegen   4
+24          Zuchtwild  19
+25               &lt;NA&gt;  19</code></pre>
 </div>
 </div>
 <p>Datum formatieren</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>cortison_datum2 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(cortison_matrix, <span class="at">monat =</span> <span class="fu">month</span>(datum_date))</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>jahreszeiten <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Frühling"</span>,<span class="st">"Sommer"</span>,<span class="st">"Herbst"</span>,<span class="st">"Winter"</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>cortison_datum3 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(cortison_datum2,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">jahreszeit =</span> <span class="fu">case_when</span>(</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                            monat <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="sc">~</span> <span class="st">"Frühling"</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                            monat <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>) <span class="sc">~</span> <span class="st">"Sommer"</span>,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                            monat <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">11</span>) <span class="sc">~</span> <span class="st">"Herbst"</span>,</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                            monat <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">12</span>) <span class="sc">~</span> <span class="st">"Winter"</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                          ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>cortison_datum3 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(cortison_matrix2, <span class="at">monat =</span> <span class="fu">month</span>(datum_date))</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>jahreszeiten <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Frühling"</span>,<span class="st">"Sommer"</span>,<span class="st">"Herbst"</span>,<span class="st">"Winter"</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>cortison_datum4 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(cortison_datum3,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">jahreszeit =</span> <span class="fu">case_when</span>(</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>                            monat <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="sc">~</span> <span class="st">"Frühling"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>                            monat <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>) <span class="sc">~</span> <span class="st">"Sommer"</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>                            monat <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">11</span>) <span class="sc">~</span> <span class="st">"Herbst"</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>                            monat <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">12</span>) <span class="sc">~</span> <span class="st">"Winter"</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>                          ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: There were 4 warnings in `mutate()`.
 The first warning was:
@@ -230,46 +941,57 @@ Caused by warning in `monat == c(3, 4, 5)`:
 ! longer object length is not a multiple of shorter object length
 ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>cortison_datum4 <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   matrix    n
+1    Blut  724
+2    Harn  707
+3    Kalb   46
+4     Kuh    1
+5   Leber  389
+6  Muskel 1023
+7   Niere   55
+8  Plasma   35
+9    oder    1
+10   &lt;NA&gt;   21</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>cortison_datum4 <span class="sc">|&gt;</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   matrix    n
+1    Blut  724
+2    Harn  707
+3    Kalb   46
+4     Kuh    1
+5   Leber  389
+6  Muskel 1023
+7   Niere   55
+8  Plasma   35
+9    oder    1
+10   &lt;NA&gt;   21</code></pre>
+</div>
 </div>
 <p>Untergruppen erstellen</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>leber <span class="ot">&lt;-</span> <span class="fu">filter</span>(cortison_datum3, matrix <span class="sc">==</span> <span class="st">"Leber"</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>niere <span class="ot">&lt;-</span> <span class="fu">filter</span>(cortison_datum3, matrix <span class="sc">==</span> <span class="st">"Niere"</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>muskel <span class="ot">&lt;-</span> <span class="fu">filter</span>(cortison_datum3, matrix <span class="sc">==</span> <span class="st">"Muskel"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>leber <span class="ot">&lt;-</span> <span class="fu">filter</span>(cortison_datum3, matrix <span class="sc">==</span> <span class="st">"Leber"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>niere <span class="ot">&lt;-</span> <span class="fu">filter</span>(cortison_datum3, matrix <span class="sc">==</span> <span class="st">"Niere"</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>muskel <span class="ot">&lt;-</span> <span class="fu">filter</span>(cortison_datum3, matrix <span class="sc">==</span> <span class="st">"Muskel"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Daten überprüfen</p>
 </section>
 <section id="daten-visualisierung" class="level1">
 <h1>Daten Visualisierung</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> cortison_datum3,</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> matrix,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cortison_conc</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                    </span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                     ))<span class="sc">+</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> cortison_datum3,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> matrix,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> cortison_conc</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                     ))<span class="sc">+</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 1222 rows containing non-finite outside the scale range
 (`stat_boxplot()`).</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Nach Tierart</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> muskel,</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> cortison_conc,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> hydrocortison_conc,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> tierart))<span class="sc">+</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 15 rows containing missing values or values outside the scale range
-(`geom_point()`).</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
@@ -279,31 +1001,53 @@ Caused by warning in `monat == c(3, 4, 5)`:
 </div>
 </div>
 </div>
+<p>Nach Tierart</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> muskel,</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> cortison_conc,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> hydrocortison_conc,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> tierart))<span class="sc">+</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 520 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>Tabelle Muskel</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(muskel, tierart) <span class="sc">|&gt;</span> </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">n</span>(),</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mean</span>(cortison_conc), </span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">min</span>(cortison_conc), </span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">max</span>(cortison_conc), </span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mean</span>(hydrocortison_conc),</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">min</span>(hydrocortison_conc),</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">max</span>(hydrocortison_conc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(muskel, tierart) <span class="sc">|&gt;</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">n</span>(),</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mean</span>(cortison_conc), </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">min</span>(cortison_conc), </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">max</span>(cortison_conc), </span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mean</span>(hydrocortison_conc),</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">min</span>(hydrocortison_conc),</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">max</span>(hydrocortison_conc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 11 × 8
+<pre><code># A tibble: 14 × 8
    tierart `n()` `mean(cortison_conc)` `min(cortison_conc)` `max(cortison_conc)`
    &lt;chr&gt;   &lt;int&gt;                 &lt;dbl&gt;                &lt;dbl&gt;                &lt;dbl&gt;
- 1 Fisch      19                 NA                    NA                     NA
- 2 Kalb        3                  2                     2                      2
- 3 Kuh        15                  3.39                  2                      6
- 4 Muni        1                  3                     3                      3
- 5 Rind       15                  4.24                  0.3                   30
- 6 Schaf       9                  3.11                  2                      8
- 7 Schwein   444                 NA                    NA                     NA
- 8 Schwei…     8                  6.25                  3                     12
- 9 Ziege       1                  4                     4                      4
-10 Ziegen      1                  2                     2                      2
-11 Zuchtw…     2                  2.5                   2                      3
+ 1 Damhir…     2                    NA                   NA                   NA
+ 2 Fisch      14                    NA                   NA                   NA
+ 3 Kalb      106                    NA                   NA                   NA
+ 4 Kaninc…     1                    NA                   NA                   NA
+ 5 Kuh       149                    NA                   NA                   NA
+ 6 Muni        5                    NA                   NA                   NA
+ 7 Ochs        1                    NA                   NA                   NA
+ 8 Rind      171                    NA                   NA                   NA
+ 9 Schaf      32                    NA                   NA                   NA
+10 Schafe      5                    NA                   NA                   NA
+11 Schwein   519                    NA                   NA                   NA
+12 Ziege       3                    NA                   NA                   NA
+13 Ziegen      3                    NA                   NA                   NA
+14 Zuchtw…    12                    NA                   NA                   NA
 # ℹ 3 more variables: `mean(hydrocortison_conc)` &lt;dbl&gt;,
 #   `min(hydrocortison_conc)` &lt;dbl&gt;, `max(hydrocortison_conc)` &lt;dbl&gt;</code></pre>
 </div>
