@@ -9,6 +9,7 @@ editor_options:
 
 ```{r}
 library(tidyverse)
+library(gt)
 ```
 
 ```{r}
@@ -39,61 +40,162 @@ Daten zusammenführen und Spaltentitel ändern
 
 ```{r}
 # merge mit all = TRUE um auch Proben mit nur einem Resultat in der Tabelle zu behalten
-cortison_beide <- merge(cortison_import, hydrocortison_import, by="ProbenID", all = TRUE)
+data_merge <- merge(cortison_import, hydrocortison_import, by="ProbenID", all = TRUE)
 # Konzentrationen als Zahl(numeric)
-cortison_newname <- mutate(cortison_beide,
+data_numeric <- mutate(data_merge,
                            cortison_conc = as.numeric(ResultatResultat.x)) |> 
-                  mutate(cortison_beide,
+                  mutate(data_merge,
                            hydrocortison_conc = as.numeric(ResultatResultat.y))
  # ware und datum in einer Spalte auch wenn nur ein Wert gefunden                 
-cortison_ware <- cortison_newname |> 
+data_ware <- data_numeric |> 
   mutate(ware = case_when(
     ProbeWare.x == is.character(ProbeWare.x) ~ ProbeWare.x,
     .default = ProbeWare.y
   ))
-
-cortison_ware |> 
+# ware aufräumen
+data_ware_clean <- data_ware |> 
+  mutate(ware = case_when(
+    ware == "Schwein - D\xe4rme" ~ "Schwein - Darm",
+    ware == "Kuh - But" ~ "Kuh - Blut",
+    ware == "Blut - Kuh" ~ "Kuh - Blut",
+    ware == "Blut - Kalb" ~ "Kuh - Blut",
+    ware == "Kalb- Blut" ~ "Kalb - Blut",
+    ware == "Fisch -Muskel" ~ "Fisch - Muskel",
+    ware == "Damhirsch - Muskel" ~ "Zuchtwild - Muskel",
+    ware == "Gehege- oder Zuchtschalenwild - Leber" ~ "Zuchtwild - Leber",
+    ware == "Kalb -  Blut" ~ "Kalb - Blut", # zwei leerschläge!
+    ware == "Kalb-Blut" ~ "Kalb - Blut",
+    ware == "Kalb- Muskel" ~ "Kalb - Muskel",
+    ware == "Kalbsfleisch" ~ "Kalb - Muskel",
+    ware == "Kalb - Urin" ~ "Kalb - Harn",
+    ware == "Kuh - Urin" ~ "Kuh - Harn",
+    ware == "Kalb- Leber" ~ "Kalb - Leber",
+    ware == "Kuh -Blut" ~ "Kuh - Blut",
+    ware == "Kuh- Blut" ~ "Kuh - Blut",
+    ware == "Kuh-Blut" ~ "Kuh - Blut",
+    ware == "Kuh- Leber" ~ "Kuh - Leber",
+    ware == "Kuh- Muskel" ~ "Kuh - Muskel",
+    ware == "Milchkuh - Blut" ~ "Kuh - Blut",
+    ware == "Rind - Kalb - Kuh - Muskel" ~ "Rind - Muskel",
+    ware == "Rind / Kalb / Kuh - Blut" ~ "Rind - Blut",
+    ware == "Rind / Kalb / Kuh - Harn" ~ "Rind - Harn",
+    ware == "Rind / Kalb / Kuh - Leber" ~ "Rind - Leber",
+    ware == "Rind / Kalb / Kuh - Urin" ~ "Rind - Harn",
+    ware == "Rind Kalb Kuh  - Leber" ~ "Rind - Leber",
+    ware == "Rind Kalb Kuh - Leber" ~ "Rind - Leber",
+    ware == "Rind - Urin" ~ "Rind - Harn",
+    ware == "Rind- Blut" ~ "Rind - Blut",
+    ware == "Rind -Blut" ~ "Rind - Blut",
+    ware == "Rind- Leber" ~ "Rind - Leber",
+    ware == "Rind- Muskel" ~ "Rind - Muskel",
+    ware == "Rind-Blut" ~ "Rind - Blut",
+    ware == "Rind/Kalb/Kuh - Blut" ~ "Rind - Blut",
+    ware == "Rind / Kalb / Kuh - Harn" ~ "Rind - Harn",
+    ware == "Rind / Kalb / Kuh - Leber" ~ "Rind - Leber",
+    ware == "Rind / Kalb / Kuh - Urin" ~ "Rind - Harn",
+    ware == "Rind/Kalb/Kuh - Harn" ~ "Rind - Harn",
+    ware == "Rind/Kalb/Kuh - Leber" ~ "Rind - Leber",
+    ware == "Rind/Kalb/Kuh - Muskel" ~ "Rind - Muskel",
+    ware == "Rind/Kalb/Kuh - Niere" ~ "Rind - Niere",
+    ware == "Rind/Kalb/Kuh - Plasma" ~ "Rind - Plasma",
+    ware == "Rind/Kalb/Kuh- Blut" ~ "Rind - Blut",
+    ware == "Schafe - Leber" ~ "Schaf - Leber",
+    ware == "Schafe - Muskel" ~ "Schaf - Muskel",
+    ware == "Schafe - Niere" ~ "Schaf - Niere",
+    ware == "Schweine - Muskel" ~ "Schwein - Muskel",
+    ware == "Stier - Blut" ~ "Rind - Blut",
+    ware == "Stier - Harn" ~ "Rind - Harn",
+    ware == "Ziegen - Leber" ~ "Ziege - Leber",
+    ware == "Ziegen - Muskel" ~ "Ziege - Muskel",
+    ware == "Muni - Harn" ~ "Rind - Harn",
+    ware == "Muni - Leber" ~ "Rind - Leber",
+    ware == "Muni - Muskel" ~ "Rind - Muskel",
+    ware == "Ochs - Harn" ~ "Rind - Harn",
+    ware == "Ochs - Muskel" ~ "Rind - Muskel",
+    ware == "Ochse - Harn" ~ "Rind - Harn",
+    ware == "Ochse - Leber" ~ "Rind - Leber",
+    .default = ware
+  ))
+  
+data_ware |> 
   count(ware)
-                 
-cortison_datum <- cortison_ware |> 
+
+data_ware_clean |> 
+  count(ware)
+# ware trennen in tierart und matrix
+data_matrix_tierart <- data_ware_clean |> 
+  separate(ware, c("tierart","matrix"))
+
+data_matrix_tierart |> 
+  count(matrix)
+
+data_matrix_tierart |> 
+  count(tierart)
+                
+# datum zusammenfassen
+
+data_matrix_tierart_datum <- data_matrix_tierart |> 
   mutate(datum = case_when(
     ProbeErhebungsdatum.x == is.character(ProbeErhebungsdatum.x) ~ ProbeErhebungsdatum.x,
     .default = ProbeErhebungsdatum.y
   ))
 
-cortison_datum |> 
+# datum aufräumen
+
+data_matrix_tierart_datum_clean <- data_matrix_tierart_datum |> 
+  mutate(datum = case_when(
+    datum == "25.10.0202 00:00:00" ~ "25.10.2021",
+    .default = datum
+  ))
+
+data_matrix_tierart_datum_clean |> 
   count(datum)
 
-
 # Datum formatieren
-cortison_datum2 <-  mutate(cortison_datum, datum_date = as_date(datum, format = "%d.%m.%Y"))
-                          
-cortison_matrix <-  separate(cortison_datum2, ware,c("tierart","matrix"))
+data_matrix_tierart_date <- data_matrix_tierart_datum_clean |> 
+  mutate(datum = as_date(datum, format = "%d.%m.%Y"))
 
 
-cortison_matrix |> 
-  count(matrix)
+data_matrix_tierart_date |> 
+  count(datum)
 
+data_matrix_tierart_date |> 
+  glimpse()
+
+# Methode in einer Spalte
+
+data_matrix_tierart_date_meth <- data_matrix_tierart_date |> 
+  mutate(methode = case_when(
+    ResultatMethodencode.x == is.character(ResultatMethodencode.x) ~ ResultatMethodencode.x,
+    .default = ResultatMethodencode.y
+  ))
+
+data_matrix_tierart_date_meth |> 
+  count(methode)
+
+data_matrix_tierart_date_methnr <- data_matrix_tierart_date_meth |> 
+  mutate(methode = case_when(
+    methode == "Z4044" ~ "EtAc",
+    methode == "Z4050" ~ "ACN",
+    .default = methode
+  ))
+
+data_matrix_tierart_date_methnr |> 
+  count(methode)
+
+data_matrix_tierart_date_methnr |> 
+  glimpse()
 ```
 
+summarize
+
 ```{r}
-cortison_matrix2 <- cortison_matrix |> 
-  mutate(matrix = case_when(
-    matrix == "But" ~ "Blut",
-    .default = matrix)) |> 
-  mutate(matrix = case_when(
-    matrix == "Urin" ~ "Harn",
-    .default = matrix)) |> 
-  mutate(tierart = case_when(
-    tierart == "Schweine"~"Schwein",
-    .default = tierart)
-  )
+cortison_tidy <- data_matrix_tierart_date_methnr |> 
+  group_by(ProbenID,cortison_conc,hydrocortison_conc,tierart,matrix,datum,methode) |> 
+  summarise()
 
-cortison_matrix2 |> 
-  count(matrix)
-
-cortison_matrix2 |> 
-  count(tierart)
+cortison_tidy |> 
+  gt()
 ```
 
 Datum formatieren
