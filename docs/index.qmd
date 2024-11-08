@@ -41,17 +41,20 @@ Daten zusammenführen und Spaltentitel ändern
 ```{r}
 # merge mit all = TRUE um auch Proben mit nur einem Resultat in der Tabelle zu behalten
 data_merge <- merge(cortison_import, hydrocortison_import, by="ProbenID", all = TRUE)
+
 # Konzentrationen als Zahl(numeric)
 data_numeric <- mutate(data_merge,
                            cortison_conc = as.numeric(ResultatResultat.x)) |> 
                   mutate(data_merge,
                            hydrocortison_conc = as.numeric(ResultatResultat.y))
- # ware und datum in einer Spalte auch wenn nur ein Wert gefunden                 
+
+# ware und datum in einer Spalte auch wenn nur ein Wert gefunden                 
 data_ware <- data_numeric |> 
   mutate(ware = case_when(
-    ProbeWare.x == is.character(ProbeWare.x) ~ ProbeWare.x,
+    ProbeWare.y == NA ~ ProbeWare.x,
     .default = ProbeWare.y
   ))
+
 # ware aufräumen
 data_ware_clean <- data_ware |> 
   mutate(ware = case_when(
@@ -196,6 +199,13 @@ cortison_tidy <- data_matrix_tierart_date_methnr |>
 
 cortison_tidy |> 
   gt()
+```
+
+exportieren
+
+```{r}
+write_csv(x = cortison_tidy,
+          "daten/processed/cortison_tidy.csv")
 ```
 
 Datum formatieren
