@@ -1,0 +1,21 @@
+---
+title: "analyse"
+author: "Stephan Walker"
+format: html
+editor: visual
+lang: de
+---
+
+# Einleitung
+
+# Daten
+
+## Bestimmungsgrenze
+
+Werte unterhalbder Bestimmungsgrenze können zwischen 0 und der Bestimmungsgrenze liegen.
+
+```{r}
+input_data <- read_csv(here::here("daten/processed/cortison_tidy.csv"))
+```
+
+# Auswertung
