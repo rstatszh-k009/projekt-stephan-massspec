@@ -8,14 +8,57 @@ lang: de
 
 # Einleitung
 
+```{r}
+library(tidyverse)
+```
+
 # Daten
 
-## Bestimmungsgrenze
-
-Werte unterhalbder Bestimmungsgrenze können zwischen 0 und der Bestimmungsgrenze liegen.
+Import
 
 ```{r}
 input_data <- read_csv(here::here("daten/processed/cortison_tidy.csv"))
+
+glimpse(input_data)
+```
+
+## Bestimmungsgrenze
+
+Werte unterhalbder Bestimmungsgrenze können zwischen 0 und der Bestimmungsgrenze liegen. Für Methode ACN 1 µg/kg, für Methode EtAc 0.25 µg/kg
+
+```{r}
+ohne_NA <- input_data |> 
+  mutate(cortison_low = case_when(
+    cortison_conc = is.na(cortison_conc) ~ 0,
+    .default = cortison_conc
+  )) |> 
+  mutate(bg = case_when(
+    methode == "EtAc" ~ 0.25,
+    methode == "ACN"~ 1
+  )) |> 
+  mutate(cortison_bg = case_when(
+    cortison_low == "0" ~ bg,
+    .default = cortison_low
+  )) |> 
+  mutate(hydrocortison_low = case_when(
+    hydrocortison_conc = is.na(hydrocortison_conc) ~ 0,
+    .default = hydrocortison_conc
+  )) |> 
+  mutate(hydrocortison_bg = case_when(
+    hydrocortison_low == "0" ~ bg,
+    .default = hydrocortison_low
+  ))
+    
+  
+glimpse(ohne_NA)
+ohne_NA |> 
+  count(bg)
 ```
 
 # Auswertung
+
+```{r}
+ggplot(ohne_NA, mapping = aes(x = tierart,
+                              y = hydrocortison_low))+
+  geom_boxplot()
+```
