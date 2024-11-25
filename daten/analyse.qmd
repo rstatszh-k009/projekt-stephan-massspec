@@ -53,12 +53,87 @@ ohne_NA <- input_data |>
 glimpse(ohne_NA)
 ohne_NA |> 
   count(bg)
+
+ohne_NA |> 
+  count(matrix)
+```
+
+Nur feste Proben
+
+```{r}
+feste_matrix <- ohne_NA |> 
+  filter(matrix == "Muskel" | matrix == "Leber" | matrix == "Niere" )
+```
+
+Nur Muskel
+
+```{r}
+muskel <- ohne_NA |> 
+  filter(matrix == "Muskel")
+```
+
+Anazhl Proben
+
+```{r}
+ohne_NA |> 
+  count(matrix) |> 
+  gt()
+
 ```
 
 # Auswertung
 
+low bound, high bound
+
 ```{r}
-ggplot(ohne_NA, mapping = aes(x = tierart,
+ohne_NA |> 
+  group_by(matrix) |> 
+  summarise(round(mean(cortison_low),2), 
+            round(mean(cortison_bg),2), 
+            round(mean(hydrocortison_low),2),
+            round(mean(hydrocortison_bg),2))|> 
+  gt()
+
+```
+
+Matrix Kennzahlen
+
+```{r}
+ohne_NA |> 
+  group_by(matrix) |> 
+  summarise(n(),
+            round(min(cortison_low),0),
+            round(mean(cortison_low),0),
+            round(max(cortison_low),0)) |> 
+  gt()
+
+ohne_NA |> 
+  group_by(matrix) |> 
+  summarise(n(),
+            round(min(hydrocortison_low),0),
+            round(mean(hydrocortison_low),0),
+            round(max(hydrocortison_low),0)) |> 
+  gt()
+```
+
+```{r}
+ggplot(feste_matrix, mapping = aes(x = hydrocortison_low))+
+  geom_histogram()+
+  facet_wrap(~matrix)
+```
+
+```{r}
+ggplot(feste_matrix, mapping = aes(x = tierart,
                               y = hydrocortison_low))+
-  geom_boxplot()
+  geom_boxplot()+
+  facet_grid(matrix ~ .)
+```
+
+```{r}
+ggplot(feste_matrix, mapping = aes(x = matrix,
+                                   y = hydrocortison_low))+
+  geom_boxplot(outlier.shape = NA)+
+  facet_wrap(~tierart)+
+  theme_minimal()
+
 ```
