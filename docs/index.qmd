@@ -5,7 +5,18 @@ editor: visual
 author: "Stephan Walker"
 editor_options: 
   chunk_output_type: console
+lang: de
 ---
+
+# Einleitung
+
+Im Rahmen des Nationalen Fremdstoffuntersuchungs Programm (NFUP) wurden in Proben von tierischen Lebensmitteln die Rückstände von Cortison und Hydrocortison gemessen. Die Messung der Substanzen erfolgte mittels Flüssigchromatograghie (LC) gekoppelt mit hochauflösender Massenspektrometrie (HRMS). Dabei werden zwischen 45 und 200 Tierarzneimittel quantifiziert.
+
+Cortison und Hydrocortison kommen natürlich in Produkten tierischer Herkunft vor. Für die Substanzen gibt es ausser für Milch keine Grenzwerte oder sonstige Beurteilungskriterien.
+
+Mit der folgenden Datenanalyse soll gezeit werden ob sich von den gemessenen Konzentrationen ein Beurteilungskriterium ableiten lässt oder ob die Substanzen als positiv kontrolle für die Methode verwendet werden können.
+
+Die Daten wurden zwischen 2019 bis 2024 erhoben.
 
 ```{r}
 library(tidyverse)
@@ -18,11 +29,7 @@ cortison_import <- read_csv2(here::here("daten/raw/Cortison_csv.csv"))
 hydrocortison_import <- read_csv2(here::here("daten/raw/Hydrocortison_csv.csv"))
 ```
 
-# Einleitung
-
-Im Rahmen des Nationalen Fremdstoffuntersuchungs Programm (NFUP) wurden in Proben von tierischen Lebensmitteln die Rückstände von Cortison und Hydrocortison gemessen. Beide Substanzen kommen natürlich in Produkten tierischer Herkunft vor. Für die Substanzen gibt es abgesehen von Milch keine Grenzwerte oder sonstige Beurteilungskriterien.
-
-## Daten
+# Daten
 
 Resultate der im Rahmen des NFUP durchgeführten Messungen durch die Abteilung Tierarzneimittel Analytik des Kantonalen Labors Zürich.
 
@@ -230,24 +237,66 @@ write_csv(x = cortison_tidy,
 
 Datum formatieren
 
+Import tidy data
+
 ```{r}
-cortison_datum3 <- mutate(cortison_matrix2, monat = month(datum_date))
-jahreszeiten <- c("Frühling","Sommer","Herbst","Winter")
-cortison_datum4 <- mutate(cortison_datum3,
-                          jahreszeit = case_when(
-                            monat == c(3,4,5) ~ "Frühling",
-                            monat == c(6,7,8) ~ "Sommer",
-                            monat == c(9,10,11) ~ "Herbst",
-                            monat == c(1,2,12) ~ "Winter"
-                          ))
+input_data <- read_csv(here::here("daten/processed/cortison_tidy.csv"))
 
+glimpse(input_data)
+```
 
+### Bestimmungsgrenze
 
-cortison_datum4 |> 
+Werte unterhalbder Bestimmungsgrenze können zwischen 0 und der Bestimmungsgrenze liegen. Für Methode ACN 1 µg/kg, für Methode EtAc 0.25 µg/kg
+
+```{r}
+ohne_NA <- input_data |> 
+  mutate(cortison_low = case_when(
+    cortison_conc = is.na(cortison_conc) ~ 0,
+    .default = cortison_conc
+  )) |> 
+  mutate(bg = case_when(
+    methode == "EtAc" ~ 0.25,
+    methode == "ACN"~ 1
+  )) |> 
+  mutate(cortison_bg = case_when(
+    cortison_low == "0" ~ bg,
+    .default = cortison_low
+  )) |> 
+  mutate(hydrocortison_low = case_when(
+    hydrocortison_conc = is.na(hydrocortison_conc) ~ 0,
+    .default = hydrocortison_conc
+  )) |> 
+  mutate(hydrocortison_bg = case_when(
+    hydrocortison_low == "0" ~ bg,
+    .default = hydrocortison_low
+  )) |> 
+  mutate(monat = month(datum)) |> 
+  mutate(jahreszeit = case_when(
+    monat == 3 ~ "Frühling",
+    monat == 4 ~ "Frühling",
+    monat == 5 ~ "Frühling",
+    monat == 6 ~ "Sommer",
+    monat == 7 ~ "Sommer",
+    monat == 8 ~ "Sommer",
+    monat == 9 ~ "Herbst",
+    monat == 10 ~ "Herbst",
+    monat == 11 ~ "Herbst",
+    monat == 12 ~ "Winter",
+    monat == 1 ~ "Winter",
+    monat == 2 ~ "Winter"
+  ))
+    
+  
+glimpse(ohne_NA)
+ohne_NA |> 
+  count(bg)
+
+ohne_NA |> 
   count(matrix)
 
-cortison_datum4 |> 
-  count(matrix)
+ohne_NA |> 
+  count(jahreszeit)
 ```
 
 Untergruppen erstellen
@@ -298,3 +347,7 @@ group_by(muskel, tierart) |>
             min(hydrocortison_conc),
             max(hydrocortison_conc))
 ```
+
+# Ergebnisse
+
+# Schlussfolgerung
