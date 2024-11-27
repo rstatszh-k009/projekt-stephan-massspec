@@ -250,6 +250,11 @@ glimpse(input_data)
 Werte unterhalbder Bestimmungsgrenze können zwischen 0 und der Bestimmungsgrenze liegen. Für Methode ACN 1 µg/kg, für Methode EtAc 0.25 µg/kg
 
 ```{r}
+# Faktor
+jahreszeiten <- c("Frühling","Sommer","Herbst","Winter")
+```
+
+```{r}
 ohne_NA <- input_data |> 
   mutate(cortison_low = case_when(
     cortison_conc = is.na(cortison_conc) ~ 0,
@@ -302,9 +307,61 @@ ohne_NA |>
 Untergruppen erstellen
 
 ```{r}
-leber <- filter(cortison_tidy, matrix == "Leber")
-niere <- filter(cortison_tidy, matrix == "Niere")
-muskel <- filter(cortison_tidy, matrix == "Muskel")
+leber <- filter(ohne_NA, matrix == "Leber")
+niere <- filter(ohne_NA, matrix == "Niere")
+muskel <- filter(ohne_NA, matrix == "Muskel")
+harn <- filter(ohne_NA, matrix == "Harn")
+```
+
+```{r}
+# boxplot hydrocortison
+ggplot(muskel, mapping = aes(
+  x = jahreszeit,
+  y = hydrocortison_low
+)) +
+  geom_boxplot(outlier.shape = NA) +
+  theme_minimal()+
+  ylim(c(0,40))
+
+# boxplot hydrocortison
+ggplot(harn, mapping = aes(
+  x = jahreszeit,
+  y = hydrocortison_low
+)) +
+  geom_boxplot(outlier.shape = NA) +
+  theme_minimal()+
+  ylim(c(0,400))
+```
+
+```{r}
+# boxplot cortison
+ggplot(muskel, mapping = aes(
+  x = jahreszeit,
+  y = cortison_low
+)) +
+  geom_boxplot(outlier.shape = NA) +
+  theme_minimal()+
+  ylim(c(0,15))
+
+# boxplot cortison
+ggplot(harn, mapping = aes(
+  x = jahreszeit,
+  y = cortison_low
+)) +
+  geom_boxplot(outlier.shape = NA) +
+  theme_minimal()+
+  ylim(c(0,150))
+```
+
+```{r}
+# Tabelle jahreszeit
+muskel |> 
+  group_by(jahreszeit) |> 
+  summarise(mean(cortison_low), mean(hydrocortison_low))
+
+harn |> 
+  group_by(jahreszeit) |> 
+  summarise(mean(cortison_low), mean(hydrocortison_low))
 ```
 
 Daten überprüfen
@@ -316,7 +373,7 @@ Daten überprüfen
 # Daten Visualisierung
 
 ```{r}
-ggplot(data = cortison_tidy,
+ggplot(data = ohne_NA,
        mapping = aes(x = matrix,
                      y = hydrocortison_conc
                     
