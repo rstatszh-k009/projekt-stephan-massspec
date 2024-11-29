@@ -290,7 +290,8 @@ ohne_NA <- input_data |>
     monat == 12 ~ "Winter",
     monat == 1 ~ "Winter",
     monat == 2 ~ "Winter"
-  ))
+  ))|> 
+  mutate(jahreszeit_fct = factor(jahreszeit, levels = jahreszeiten))
     
   
 glimpse(ohne_NA)
@@ -308,15 +309,18 @@ Untergruppen erstellen
 
 ```{r}
 leber <- filter(ohne_NA, matrix == "Leber")
+
 niere <- filter(ohne_NA, matrix == "Niere")
+
 muskel <- filter(ohne_NA, matrix == "Muskel")
+
 harn <- filter(ohne_NA, matrix == "Harn")
 ```
 
 ```{r}
 # boxplot hydrocortison
 ggplot(muskel, mapping = aes(
-  x = jahreszeit,
+  x = jahreszeit_fct,
   y = hydrocortison_low
 )) +
   geom_boxplot(outlier.shape = NA) +
@@ -325,7 +329,7 @@ ggplot(muskel, mapping = aes(
 
 # boxplot hydrocortison
 ggplot(harn, mapping = aes(
-  x = jahreszeit,
+  x = jahreszeit_fct,
   y = hydrocortison_low
 )) +
   geom_boxplot(outlier.shape = NA) +
@@ -336,16 +340,17 @@ ggplot(harn, mapping = aes(
 ```{r}
 # boxplot cortison
 ggplot(muskel, mapping = aes(
-  x = jahreszeit,
+  x = jahreszeit_fct,
   y = cortison_low
 )) +
   geom_boxplot(outlier.shape = NA) +
   theme_minimal()+
   ylim(c(0,15))
 
+
 # boxplot cortison
 ggplot(harn, mapping = aes(
-  x = jahreszeit,
+  x = jahreszeit_fct,
   y = cortison_low
 )) +
   geom_boxplot(outlier.shape = NA) +
@@ -356,11 +361,11 @@ ggplot(harn, mapping = aes(
 ```{r}
 # Tabelle jahreszeit
 muskel |> 
-  group_by(jahreszeit) |> 
+  group_by(jahreszeit_fct) |> 
   summarise(mean(cortison_low), mean(hydrocortison_low))
 
 harn |> 
-  group_by(jahreszeit) |> 
+  group_by(jahreszeit_fct) |> 
   summarise(mean(cortison_low), mean(hydrocortison_low))
 ```
 
@@ -373,23 +378,13 @@ Daten überprüfen
 # Daten Visualisierung
 
 ```{r}
-ggplot(data = ohne_NA,
-       mapping = aes(x = matrix,
-                     y = hydrocortison_conc
-                    
-                     ))+
-  geom_boxplot()
 
 ```
 
 Nach Tierart
 
 ```{r}
-ggplot(data = muskel,
-       mapping = aes(x = cortison_conc,
-                     y = hydrocortison_conc,
-                     color = tierart))+
-  geom_point()
+
 ```
 
 Tabelle Muskel
@@ -397,12 +392,14 @@ Tabelle Muskel
 ```{r}
 group_by(muskel, tierart) |> 
   summarise(n(),
-            mean(cortison_conc), 
-            min(cortison_conc), 
-            max(cortison_conc), 
-            mean(hydrocortison_conc),
-            min(hydrocortison_conc),
-            max(hydrocortison_conc))
+            mean(cortison_low), 
+            min(cortison_low), 
+            max(cortison_low), 
+            mean(hydrocortison_low),
+            min(hydrocortison_low),
+            max(hydrocortison_low)) |> 
+  gt()
+
 ```
 
 # Ergebnisse
