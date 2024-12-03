@@ -228,8 +228,9 @@ cortison_tidy <- data_matrix_tierart_date_methnr |>
 exportieren
 
 ```{r}
-write_csv(x = cortison_tidy,
-          "daten/processed/cortison_tidy.csv")
+
+# write_csv(x = cortison_tidy,
+#          "daten/processed/cortison_tidy.csv")
 ```
 
 Datum formatieren
@@ -237,7 +238,8 @@ Datum formatieren
 Import tidy data
 
 ```{r}
-input_data <- read_csv(here::here("daten/processed/cortison_tidy.csv"))
+#input_data <- read_csv(here::here("daten/processed/cortison_tidy.csv"))
+input_data <- cortison_tidy
 
 glimpse(input_data)
 ```
