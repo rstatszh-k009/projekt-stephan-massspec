@@ -14,7 +14,7 @@ Im Rahmen des Nationalen Fremdstoffuntersuchungs Programm (NFUP) wurden in Probe
 
 Cortison und Hydrocortison kommen natürlich in Produkten tierischer Herkunft vor. Für die Substanzen gibt es ausser für Milch keine Grenzwerte oder sonstige Beurteilungskriterien.
 
-Mit der folgenden Datenanalyse soll gezeit werden ob sich von den gemessenen Konzentrationen ein Beurteilungskriterium ableiten lässt oder ob die Substanzen als positiv kontrolle für die Methode verwendet werden können.
+Mit der folgenden Datenanalyse soll gezeit werden ob sich von den gemessenen Konzentrationen ein Beurteilungskriterium ableiten lässt oder ob die Substanzen als Positivkontrolle für die Methode verwendet werden können.
 
 Die Daten wurden zwischen 2019 bis 2024 erhoben.
 
@@ -223,9 +223,6 @@ summarize
 cortison_tidy <- data_matrix_tierart_date_methnr |> 
   group_by(ProbenID,cortison_conc,hydrocortison_conc,tierart,matrix,datum,methode) |> 
   summarise()
-
-cortison_tidy |> 
-  gt()
 ```
 
 exportieren
@@ -290,8 +287,15 @@ ohne_NA <- input_data |>
     monat == 12 ~ "Winter",
     monat == 1 ~ "Winter",
     monat == 2 ~ "Winter"
-  ))|> 
-  mutate(jahreszeit_fct = factor(jahreszeit, levels = jahreszeiten))
+  ))|> # negativ = 1, positiv = 0
+  mutate(jahreszeit_fct = factor(jahreszeit, levels = jahreszeiten)) |> 
+  mutate(cortison_pos = case_when(
+    cortison_low == 0 ~ 1,
+    .default = 0
+  )) |> # negativ = 1, positiv = 0
+  mutate(hydrocortison_pos = case_when(
+    hydrocortison_low == 0 ~ 1,
+    .default = 0))
     
   
 glimpse(ohne_NA)
@@ -315,6 +319,13 @@ niere <- filter(ohne_NA, matrix == "Niere")
 muskel <- filter(ohne_NA, matrix == "Muskel")
 
 harn <- filter(ohne_NA, matrix == "Harn")
+
+schwein <- filter(ohne_NA, tierart == "Schwein")
+
+rinder <- filter(ohne_NA, tierart == "Rind" | tierart == "Kuh" | tierart == "Kalb")
+
+rinder |> 
+  count(tierart)
 ```
 
 ```{r}
@@ -369,6 +380,27 @@ harn |>
   summarise(mean(cortison_low), mean(hydrocortison_low))
 ```
 
+```{r}
+# Tabelle mit positiven
+# übersicht Cortison
+ohne_NA |> 
+  group_by(matrix) |> 
+  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(cortison_pos/n()))*100,0),"Median [µg/kg]" = round(mean(cortison_low),0), "kleinster Wert [µg/kg]" = min(cortison_low),"höchster Wert [µg/kg]" = max(cortison_low)) |> 
+  gt()
+# übersicht Hydrocortison  
+ohne_NA |> 
+  group_by(matrix) |> 
+  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Median [µg/kg]" = round(mean(hydrocortison_low),0), "kleinster Wert [µg/kg]" = min(hydrocortison_low),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
+  gt()
+
+# Muskel nach Tierart
+muskel |> 
+   group_by(tierart) |> 
+  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Median [µg/kg]" = round(mean(hydrocortison_low),0), "kleinster Wert [µg/kg]" = min(hydrocortison_low),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
+  gt()
+
+```
+
 Daten überprüfen
 
 ```{r}
@@ -378,6 +410,12 @@ Daten überprüfen
 # Daten Visualisierung
 
 ```{r}
+# Verteilung in Muskel
+ggplot(muskel, mapping = aes(x = tierart,
+                             y = hydrocortison_low))+
+   geom_boxplot(outlier.shape = NA) +
+  theme_minimal()+
+  ylim(c(0,40))
 
 ```
 
