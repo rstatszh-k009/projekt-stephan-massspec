@@ -257,6 +257,8 @@ Werte unterhalbder Bestimmungsgrenze können zwischen 0 und der Bestimmungsgrenz
 jahreszeiten <- c("Frühling","Sommer","Herbst","Winter")
 
 matrix_sort <- c("Muskel", "Leber", "Niere", "Darm", "Blut", "Plasma", "Harn")
+
+tierart_sort <- c("Rind", "Kuh", "Kalb", "Schwein", "Huhn", "Truthahn", "Schaf", "Ziege", "Zuchtwild", "Pferd", "Kaninchen", "Fisch")
 ```
 
 ```{r}
@@ -298,6 +300,7 @@ ohne_NA <- input_data |>
   ))|>
   mutate(jahreszeit_fct = factor(jahreszeit, levels = jahreszeiten)) |> 
   mutate(matrix_fct = factor(matrix, levels = matrix_sort)) |> 
+  mutate(tierart_fct = factor(tierart, levels = tierart_sort)) |> 
       # negativ = 1, positiv = 0     
   mutate(cortison_pos = case_when(
     cortison_low == 0 ~ 1,
@@ -317,6 +320,21 @@ ohne_NA |>
 
 ohne_NA |> 
   count(jahreszeit)
+```
+
+In der Tabelle sind die Proben dargestellt
+
+```{r}
+#| eval: true
+#| echo: true
+#| lable: "Proben_NFUP"
+#| tbl-cap: "Proben im Datensatz"
+
+ohne_NA |> 
+  group_by("Tierart" = tierart_fct, "Matrix" = matrix_fct) |> 
+  summarise("Anzahl" = n()) |> 
+  gt()
+
 ```
 
 Untergruppen erstellen
