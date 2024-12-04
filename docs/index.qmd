@@ -1,5 +1,7 @@
 ---
-title: "index"
+title: "Cortison- und Hydrocortisongehalte in tierischen Produkten"
+subtitle: "Datenauswertung von im Rahmen des nationalen Fremdstoffuntersuchungs Program gemessenen Proben"
+date: 10.12.2024
 format: html
 editor: visual
 author: "Stephan Walker"
@@ -19,6 +21,8 @@ Mit der folgenden Datenanalyse soll gezeit werden ob sich von den gemessenen Kon
 Die Daten wurden zwischen 2019 bis 2024 erhoben.
 
 ```{r}
+#| eval: true
+#| echo: true
 library(tidyverse)
 library(gt)
 ```
@@ -385,20 +389,25 @@ harn |>
 ```{r}
 # Tabelle mit positiven
 # übersicht Cortison
+
+#| eval: true
+#| echo: true
+#| lable: "Tabelle"
+#| tbl-cap: "Gehalte nach Matrix"
 ohne_NA |> 
   group_by(matrix) |> 
-  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(cortison_pos/n()))*100,0),"Median [µg/kg]" = round(mean(cortison_low),0), "kleinster Wert [µg/kg]" = min(cortison_low),"höchster Wert [µg/kg]" = max(cortison_low)) |> 
+  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(cortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(cortison_low),0),"Standard Abweichung" = round(sd(cortison_low),0),"höchster Wert [µg/kg]" = max(cortison_low)) |> 
   gt()
 # übersicht Hydrocortison  
 ohne_NA |> 
   group_by(matrix) |> 
-  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Median [µg/kg]" = round(mean(hydrocortison_low),0), "kleinster Wert [µg/kg]" = min(hydrocortison_low),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
+  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
   gt()
 
 # Muskel nach Tierart
 muskel |> 
    group_by(tierart) |> 
-  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Median [µg/kg]" = round(mean(hydrocortison_low),0), "kleinster Wert [µg/kg]" = min(hydrocortison_low),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
+  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
   gt()
 
 ```

@@ -8,7 +8,7 @@
 
 <meta name="author" content="Stephan Walker">
 
-<title>index</title>
+<title>Cortison- und Hydrocortisongehalte in tierischen Produkten</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -80,7 +80,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">index</h1>
+<h1 class="title">Cortison- und Hydrocortisongehalte in tierischen Produkten</h1>
+<p class="subtitle lead">Datenauswertung von im Rahmen des nationalen Fremdstoffuntersuchungs Program gemessenen Proben</p>
 </div>
 
 
@@ -94,6 +95,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Veröffentlichungsdatum</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">12. Oktober 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -3110,28 +3117,33 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
 <div class="cell">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabelle mit positiven</span></span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="co"># übersicht Cortison</span></span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>ohne_NA <span class="sc">|&gt;</span> </span>
-<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(matrix) <span class="sc">|&gt;</span> </span>
-<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Anzahl Proben"</span> <span class="ot">=</span> <span class="fu">n</span>(),<span class="st">"Prozent negativ"</span> <span class="ot">=</span> <span class="fu">round</span>((<span class="fu">sum</span>(cortison_pos<span class="sc">/</span><span class="fu">n</span>()))<span class="sc">*</span><span class="dv">100</span>,<span class="dv">0</span>),<span class="st">"Median [µg/kg]"</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(cortison_low),<span class="dv">0</span>), <span class="st">"kleinster Wert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">min</span>(cortison_low),<span class="st">"höchster Wert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">max</span>(cortison_low)) <span class="sc">|&gt;</span> </span>
-<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a><span class="co">#| lable: "Tabelle"</span></span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Gehalte nach Matrix"</span></span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>ohne_NA <span class="sc">|&gt;</span> </span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(matrix) <span class="sc">|&gt;</span> </span>
+<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Anzahl Proben"</span> <span class="ot">=</span> <span class="fu">n</span>(),<span class="st">"Prozent negativ"</span> <span class="ot">=</span> <span class="fu">round</span>((<span class="fu">sum</span>(cortison_pos<span class="sc">/</span><span class="fu">n</span>()))<span class="sc">*</span><span class="dv">100</span>,<span class="dv">0</span>),<span class="st">"Mittelwert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(cortison_low),<span class="dv">0</span>),<span class="st">"Standard Abweichung"</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">sd</span>(cortison_low),<span class="dv">0</span>),<span class="st">"höchster Wert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">max</span>(cortison_low)) <span class="sc">|&gt;</span> </span>
+<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="welfogejpv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#welfogejpv table {
+<div id="ydhmjujbcz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ydhmjujbcz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#welfogejpv thead, #welfogejpv tbody, #welfogejpv tfoot, #welfogejpv tr, #welfogejpv td, #welfogejpv th {
+#ydhmjujbcz thead, #ydhmjujbcz tbody, #ydhmjujbcz tfoot, #ydhmjujbcz tr, #ydhmjujbcz td, #ydhmjujbcz th {
   border-style: none;
 }
 
-#welfogejpv p {
+#ydhmjujbcz p {
   margin: 0;
   padding: 0;
 }
 
-#welfogejpv .gt_table {
+#ydhmjujbcz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3157,12 +3169,12 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-left-color: #D3D3D3;
 }
 
-#welfogejpv .gt_caption {
+#ydhmjujbcz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#welfogejpv .gt_title {
+#ydhmjujbcz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3174,7 +3186,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-width: 0;
 }
 
-#welfogejpv .gt_subtitle {
+#ydhmjujbcz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3186,7 +3198,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-top-width: 0;
 }
 
-#welfogejpv .gt_heading {
+#ydhmjujbcz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3198,13 +3210,13 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#welfogejpv .gt_bottom_border {
+#ydhmjujbcz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#welfogejpv .gt_col_headings {
+#ydhmjujbcz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3219,7 +3231,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#welfogejpv .gt_col_heading {
+#ydhmjujbcz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3239,7 +3251,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   overflow-x: hidden;
 }
 
-#welfogejpv .gt_column_spanner_outer {
+#ydhmjujbcz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3251,15 +3263,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 4px;
 }
 
-#welfogejpv .gt_column_spanner_outer:first-child {
+#ydhmjujbcz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#welfogejpv .gt_column_spanner_outer:last-child {
+#ydhmjujbcz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#welfogejpv .gt_column_spanner {
+#ydhmjujbcz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3271,11 +3283,11 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   width: 100%;
 }
 
-#welfogejpv .gt_spanner_row {
+#ydhmjujbcz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#welfogejpv .gt_group_heading {
+#ydhmjujbcz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3301,7 +3313,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   text-align: left;
 }
 
-#welfogejpv .gt_empty_group_heading {
+#ydhmjujbcz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3316,15 +3328,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   vertical-align: middle;
 }
 
-#welfogejpv .gt_from_md > :first-child {
+#ydhmjujbcz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#welfogejpv .gt_from_md > :last-child {
+#ydhmjujbcz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#welfogejpv .gt_row {
+#ydhmjujbcz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3343,7 +3355,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   overflow-x: hidden;
 }
 
-#welfogejpv .gt_stub {
+#ydhmjujbcz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3356,7 +3368,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#welfogejpv .gt_stub_row_group {
+#ydhmjujbcz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3370,15 +3382,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   vertical-align: top;
 }
 
-#welfogejpv .gt_row_group_first td {
+#ydhmjujbcz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#welfogejpv .gt_row_group_first th {
+#ydhmjujbcz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#welfogejpv .gt_summary_row {
+#ydhmjujbcz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3388,16 +3400,16 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#welfogejpv .gt_first_summary_row {
+#ydhmjujbcz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#welfogejpv .gt_first_summary_row.thick {
+#ydhmjujbcz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#welfogejpv .gt_last_summary_row {
+#ydhmjujbcz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3407,7 +3419,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#welfogejpv .gt_grand_summary_row {
+#ydhmjujbcz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3417,7 +3429,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#welfogejpv .gt_first_grand_summary_row {
+#ydhmjujbcz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3427,7 +3439,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-top-color: #D3D3D3;
 }
 
-#welfogejpv .gt_last_grand_summary_row_top {
+#ydhmjujbcz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3437,11 +3449,11 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#welfogejpv .gt_striped {
+#ydhmjujbcz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#welfogejpv .gt_table_body {
+#ydhmjujbcz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3450,7 +3462,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#welfogejpv .gt_footnotes {
+#ydhmjujbcz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3464,7 +3476,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#welfogejpv .gt_footnote {
+#ydhmjujbcz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3473,7 +3485,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#welfogejpv .gt_sourcenotes {
+#ydhmjujbcz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3487,7 +3499,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#welfogejpv .gt_sourcenote {
+#ydhmjujbcz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3495,72 +3507,72 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#welfogejpv .gt_left {
+#ydhmjujbcz .gt_left {
   text-align: left;
 }
 
-#welfogejpv .gt_center {
+#ydhmjujbcz .gt_center {
   text-align: center;
 }
 
-#welfogejpv .gt_right {
+#ydhmjujbcz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#welfogejpv .gt_font_normal {
+#ydhmjujbcz .gt_font_normal {
   font-weight: normal;
 }
 
-#welfogejpv .gt_font_bold {
+#ydhmjujbcz .gt_font_bold {
   font-weight: bold;
 }
 
-#welfogejpv .gt_font_italic {
+#ydhmjujbcz .gt_font_italic {
   font-style: italic;
 }
 
-#welfogejpv .gt_super {
+#ydhmjujbcz .gt_super {
   font-size: 65%;
 }
 
-#welfogejpv .gt_footnote_marks {
+#ydhmjujbcz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#welfogejpv .gt_asterisk {
+#ydhmjujbcz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#welfogejpv .gt_indent_1 {
+#ydhmjujbcz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#welfogejpv .gt_indent_2 {
+#ydhmjujbcz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#welfogejpv .gt_indent_3 {
+#ydhmjujbcz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#welfogejpv .gt_indent_4 {
+#ydhmjujbcz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#welfogejpv .gt_indent_5 {
+#ydhmjujbcz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#welfogejpv .katex-display {
+#ydhmjujbcz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#welfogejpv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ydhmjujbcz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3571,8 +3583,8 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
 <th id="matrix" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">matrix</th>
 <th id="Anzahl Proben" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Anzahl Proben</th>
 <th id="Prozent negativ" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Prozent negativ</th>
-<th id="Median [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Median [µg/kg]</th>
-<th id="kleinster Wert [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">kleinster Wert [µg/kg]</th>
+<th id="Mittelwert [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mittelwert [µg/kg]</th>
+<th id="Standard Abweichung" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Standard Abweichung</th>
 <th id="höchster Wert [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">höchster Wert [µg/kg]</th>
 </tr>
 </thead>
@@ -3581,56 +3593,56 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
 <td class="gt_row gt_left" headers="matrix">Blut</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">743</td>
 <td class="gt_row gt_right" headers="Prozent negativ">45</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">1</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">1</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">2</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">17</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="matrix">Darm</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">1</td>
 <td class="gt_row gt_right" headers="Prozent negativ">0</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">3</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">3</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">3</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">NA</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="matrix">Harn</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">716</td>
 <td class="gt_row gt_right" headers="Prozent negativ">20</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">99</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">99</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">228</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">2887</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="matrix">Leber</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">400</td>
 <td class="gt_row gt_right" headers="Prozent negativ">49</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">3</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">3</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">24</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">330</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="matrix">Muskel</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">1039</td>
 <td class="gt_row gt_right" headers="Prozent negativ">51</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">3</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">3</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">4</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">42</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="matrix">Niere</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">65</td>
 <td class="gt_row gt_right" headers="Prozent negativ">0</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">64</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">3</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">64</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">67</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">363</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="matrix">Plasma</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">38</td>
 <td class="gt_row gt_right" headers="Prozent negativ">71</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">1</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">1</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">3</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">13</td>
 </tr>
 </tbody>
@@ -3641,26 +3653,26 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># übersicht Hydrocortison  </span></span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>ohne_NA <span class="sc">|&gt;</span> </span>
 <span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(matrix) <span class="sc">|&gt;</span> </span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Anzahl Proben"</span> <span class="ot">=</span> <span class="fu">n</span>(),<span class="st">"Prozent negativ"</span> <span class="ot">=</span> <span class="fu">round</span>((<span class="fu">sum</span>(hydrocortison_pos<span class="sc">/</span><span class="fu">n</span>()))<span class="sc">*</span><span class="dv">100</span>,<span class="dv">0</span>),<span class="st">"Median [µg/kg]"</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(hydrocortison_low),<span class="dv">0</span>), <span class="st">"kleinster Wert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">min</span>(hydrocortison_low),<span class="st">"höchster Wert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">max</span>(hydrocortison_low)) <span class="sc">|&gt;</span> </span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Anzahl Proben"</span> <span class="ot">=</span> <span class="fu">n</span>(),<span class="st">"Prozent negativ"</span> <span class="ot">=</span> <span class="fu">round</span>((<span class="fu">sum</span>(hydrocortison_pos<span class="sc">/</span><span class="fu">n</span>()))<span class="sc">*</span><span class="dv">100</span>,<span class="dv">0</span>),<span class="st">"Mittelwert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(hydrocortison_low),<span class="dv">0</span>), <span class="st">"Standard Abweichung"</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">sd</span>(hydrocortison_low),<span class="dv">0</span>),<span class="st">"höchster Wert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">max</span>(hydrocortison_low)) <span class="sc">|&gt;</span> </span>
 <span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="yrjpdbxabo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#yrjpdbxabo table {
+<div id="hvieslxjbz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hvieslxjbz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#yrjpdbxabo thead, #yrjpdbxabo tbody, #yrjpdbxabo tfoot, #yrjpdbxabo tr, #yrjpdbxabo td, #yrjpdbxabo th {
+#hvieslxjbz thead, #hvieslxjbz tbody, #hvieslxjbz tfoot, #hvieslxjbz tr, #hvieslxjbz td, #hvieslxjbz th {
   border-style: none;
 }
 
-#yrjpdbxabo p {
+#hvieslxjbz p {
   margin: 0;
   padding: 0;
 }
 
-#yrjpdbxabo .gt_table {
+#hvieslxjbz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3686,12 +3698,12 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-left-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_caption {
+#hvieslxjbz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#yrjpdbxabo .gt_title {
+#hvieslxjbz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3703,7 +3715,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-width: 0;
 }
 
-#yrjpdbxabo .gt_subtitle {
+#hvieslxjbz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3715,7 +3727,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-top-width: 0;
 }
 
-#yrjpdbxabo .gt_heading {
+#hvieslxjbz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3727,13 +3739,13 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_bottom_border {
+#hvieslxjbz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_col_headings {
+#hvieslxjbz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3748,7 +3760,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_col_heading {
+#hvieslxjbz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3768,7 +3780,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   overflow-x: hidden;
 }
 
-#yrjpdbxabo .gt_column_spanner_outer {
+#hvieslxjbz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3780,15 +3792,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 4px;
 }
 
-#yrjpdbxabo .gt_column_spanner_outer:first-child {
+#hvieslxjbz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#yrjpdbxabo .gt_column_spanner_outer:last-child {
+#hvieslxjbz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#yrjpdbxabo .gt_column_spanner {
+#hvieslxjbz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3800,11 +3812,11 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   width: 100%;
 }
 
-#yrjpdbxabo .gt_spanner_row {
+#hvieslxjbz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#yrjpdbxabo .gt_group_heading {
+#hvieslxjbz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3830,7 +3842,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   text-align: left;
 }
 
-#yrjpdbxabo .gt_empty_group_heading {
+#hvieslxjbz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3845,15 +3857,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   vertical-align: middle;
 }
 
-#yrjpdbxabo .gt_from_md > :first-child {
+#hvieslxjbz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#yrjpdbxabo .gt_from_md > :last-child {
+#hvieslxjbz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#yrjpdbxabo .gt_row {
+#hvieslxjbz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3872,7 +3884,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   overflow-x: hidden;
 }
 
-#yrjpdbxabo .gt_stub {
+#hvieslxjbz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3885,7 +3897,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#yrjpdbxabo .gt_stub_row_group {
+#hvieslxjbz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3899,15 +3911,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   vertical-align: top;
 }
 
-#yrjpdbxabo .gt_row_group_first td {
+#hvieslxjbz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#yrjpdbxabo .gt_row_group_first th {
+#hvieslxjbz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#yrjpdbxabo .gt_summary_row {
+#hvieslxjbz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3917,16 +3929,16 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#yrjpdbxabo .gt_first_summary_row {
+#hvieslxjbz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_first_summary_row.thick {
+#hvieslxjbz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#yrjpdbxabo .gt_last_summary_row {
+#hvieslxjbz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3936,7 +3948,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_grand_summary_row {
+#hvieslxjbz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3946,7 +3958,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#yrjpdbxabo .gt_first_grand_summary_row {
+#hvieslxjbz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3956,7 +3968,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-top-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_last_grand_summary_row_top {
+#hvieslxjbz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3966,11 +3978,11 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_striped {
+#hvieslxjbz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#yrjpdbxabo .gt_table_body {
+#hvieslxjbz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3979,7 +3991,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_footnotes {
+#hvieslxjbz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3993,7 +4005,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_footnote {
+#hvieslxjbz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -4002,7 +4014,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#yrjpdbxabo .gt_sourcenotes {
+#hvieslxjbz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4016,7 +4028,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#yrjpdbxabo .gt_sourcenote {
+#hvieslxjbz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -4024,72 +4036,72 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#yrjpdbxabo .gt_left {
+#hvieslxjbz .gt_left {
   text-align: left;
 }
 
-#yrjpdbxabo .gt_center {
+#hvieslxjbz .gt_center {
   text-align: center;
 }
 
-#yrjpdbxabo .gt_right {
+#hvieslxjbz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#yrjpdbxabo .gt_font_normal {
+#hvieslxjbz .gt_font_normal {
   font-weight: normal;
 }
 
-#yrjpdbxabo .gt_font_bold {
+#hvieslxjbz .gt_font_bold {
   font-weight: bold;
 }
 
-#yrjpdbxabo .gt_font_italic {
+#hvieslxjbz .gt_font_italic {
   font-style: italic;
 }
 
-#yrjpdbxabo .gt_super {
+#hvieslxjbz .gt_super {
   font-size: 65%;
 }
 
-#yrjpdbxabo .gt_footnote_marks {
+#hvieslxjbz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#yrjpdbxabo .gt_asterisk {
+#hvieslxjbz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#yrjpdbxabo .gt_indent_1 {
+#hvieslxjbz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#yrjpdbxabo .gt_indent_2 {
+#hvieslxjbz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#yrjpdbxabo .gt_indent_3 {
+#hvieslxjbz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#yrjpdbxabo .gt_indent_4 {
+#hvieslxjbz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#yrjpdbxabo .gt_indent_5 {
+#hvieslxjbz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#yrjpdbxabo .katex-display {
+#hvieslxjbz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#yrjpdbxabo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#hvieslxjbz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -4100,8 +4112,8 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
 <th id="matrix" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">matrix</th>
 <th id="Anzahl Proben" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Anzahl Proben</th>
 <th id="Prozent negativ" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Prozent negativ</th>
-<th id="Median [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Median [µg/kg]</th>
-<th id="kleinster Wert [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">kleinster Wert [µg/kg]</th>
+<th id="Mittelwert [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mittelwert [µg/kg]</th>
+<th id="Standard Abweichung" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Standard Abweichung</th>
 <th id="höchster Wert [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">höchster Wert [µg/kg]</th>
 </tr>
 </thead>
@@ -4110,56 +4122,56 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
 <td class="gt_row gt_left" headers="matrix">Blut</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">743</td>
 <td class="gt_row gt_right" headers="Prozent negativ">13</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">15</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">15</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">18</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">129</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="matrix">Darm</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">1</td>
 <td class="gt_row gt_right" headers="Prozent negativ">0</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">3</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">3</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">3</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">NA</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="matrix">Harn</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">716</td>
 <td class="gt_row gt_right" headers="Prozent negativ">27</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">72</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">72</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">194</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">3940</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="matrix">Leber</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">400</td>
 <td class="gt_row gt_right" headers="Prozent negativ">32</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">2</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">2</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">6</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">68</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="matrix">Muskel</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">1039</td>
 <td class="gt_row gt_right" headers="Prozent negativ">1</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">15</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">15</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">15</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">260</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="matrix">Niere</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">65</td>
 <td class="gt_row gt_right" headers="Prozent negativ">12</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">7</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">7</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">6</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">26</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="matrix">Plasma</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">38</td>
 <td class="gt_row gt_right" headers="Prozent negativ">0</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">14</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">2</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">14</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">16</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">89</td>
 </tr>
 </tbody>
@@ -4170,26 +4182,26 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Muskel nach Tierart</span></span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>muskel <span class="sc">|&gt;</span> </span>
 <span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(tierart) <span class="sc">|&gt;</span> </span>
-<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Anzahl Proben"</span> <span class="ot">=</span> <span class="fu">n</span>(),<span class="st">"Prozent negativ"</span> <span class="ot">=</span> <span class="fu">round</span>((<span class="fu">sum</span>(hydrocortison_pos<span class="sc">/</span><span class="fu">n</span>()))<span class="sc">*</span><span class="dv">100</span>,<span class="dv">0</span>),<span class="st">"Median [µg/kg]"</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(hydrocortison_low),<span class="dv">0</span>), <span class="st">"kleinster Wert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">min</span>(hydrocortison_low),<span class="st">"höchster Wert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">max</span>(hydrocortison_low)) <span class="sc">|&gt;</span> </span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"Anzahl Proben"</span> <span class="ot">=</span> <span class="fu">n</span>(),<span class="st">"Prozent negativ"</span> <span class="ot">=</span> <span class="fu">round</span>((<span class="fu">sum</span>(hydrocortison_pos<span class="sc">/</span><span class="fu">n</span>()))<span class="sc">*</span><span class="dv">100</span>,<span class="dv">0</span>),<span class="st">"Mittelwert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(hydrocortison_low),<span class="dv">0</span>), <span class="st">"Standard Abweichung"</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">sd</span>(hydrocortison_low),<span class="dv">0</span>),<span class="st">"höchster Wert [µg/kg]"</span> <span class="ot">=</span> <span class="fu">max</span>(hydrocortison_low)) <span class="sc">|&gt;</span> </span>
 <span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="nutcpmebso" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#nutcpmebso table {
+<div id="juazmdqgtj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#juazmdqgtj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#nutcpmebso thead, #nutcpmebso tbody, #nutcpmebso tfoot, #nutcpmebso tr, #nutcpmebso td, #nutcpmebso th {
+#juazmdqgtj thead, #juazmdqgtj tbody, #juazmdqgtj tfoot, #juazmdqgtj tr, #juazmdqgtj td, #juazmdqgtj th {
   border-style: none;
 }
 
-#nutcpmebso p {
+#juazmdqgtj p {
   margin: 0;
   padding: 0;
 }
 
-#nutcpmebso .gt_table {
+#juazmdqgtj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -4215,12 +4227,12 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-left-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_caption {
+#juazmdqgtj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#nutcpmebso .gt_title {
+#juazmdqgtj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -4232,7 +4244,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-width: 0;
 }
 
-#nutcpmebso .gt_subtitle {
+#juazmdqgtj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4244,7 +4256,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-top-width: 0;
 }
 
-#nutcpmebso .gt_heading {
+#juazmdqgtj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -4256,13 +4268,13 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_bottom_border {
+#juazmdqgtj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_col_headings {
+#juazmdqgtj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4277,7 +4289,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_col_heading {
+#juazmdqgtj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4297,7 +4309,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   overflow-x: hidden;
 }
 
-#nutcpmebso .gt_column_spanner_outer {
+#juazmdqgtj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4309,15 +4321,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 4px;
 }
 
-#nutcpmebso .gt_column_spanner_outer:first-child {
+#juazmdqgtj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#nutcpmebso .gt_column_spanner_outer:last-child {
+#juazmdqgtj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#nutcpmebso .gt_column_spanner {
+#juazmdqgtj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -4329,11 +4341,11 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   width: 100%;
 }
 
-#nutcpmebso .gt_spanner_row {
+#juazmdqgtj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#nutcpmebso .gt_group_heading {
+#juazmdqgtj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4359,7 +4371,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   text-align: left;
 }
 
-#nutcpmebso .gt_empty_group_heading {
+#juazmdqgtj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4374,15 +4386,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   vertical-align: middle;
 }
 
-#nutcpmebso .gt_from_md > :first-child {
+#juazmdqgtj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#nutcpmebso .gt_from_md > :last-child {
+#juazmdqgtj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#nutcpmebso .gt_row {
+#juazmdqgtj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4401,7 +4413,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   overflow-x: hidden;
 }
 
-#nutcpmebso .gt_stub {
+#juazmdqgtj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4414,7 +4426,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#nutcpmebso .gt_stub_row_group {
+#juazmdqgtj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4428,15 +4440,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   vertical-align: top;
 }
 
-#nutcpmebso .gt_row_group_first td {
+#juazmdqgtj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#nutcpmebso .gt_row_group_first th {
+#juazmdqgtj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#nutcpmebso .gt_summary_row {
+#juazmdqgtj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4446,16 +4458,16 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#nutcpmebso .gt_first_summary_row {
+#juazmdqgtj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_first_summary_row.thick {
+#juazmdqgtj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#nutcpmebso .gt_last_summary_row {
+#juazmdqgtj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4465,7 +4477,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_grand_summary_row {
+#juazmdqgtj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4475,7 +4487,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#nutcpmebso .gt_first_grand_summary_row {
+#juazmdqgtj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4485,7 +4497,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-top-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_last_grand_summary_row_top {
+#juazmdqgtj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4495,11 +4507,11 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_striped {
+#juazmdqgtj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#nutcpmebso .gt_table_body {
+#juazmdqgtj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4508,7 +4520,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_footnotes {
+#juazmdqgtj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4522,7 +4534,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_footnote {
+#juazmdqgtj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -4531,7 +4543,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#nutcpmebso .gt_sourcenotes {
+#juazmdqgtj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4545,7 +4557,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#nutcpmebso .gt_sourcenote {
+#juazmdqgtj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -4553,72 +4565,72 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#nutcpmebso .gt_left {
+#juazmdqgtj .gt_left {
   text-align: left;
 }
 
-#nutcpmebso .gt_center {
+#juazmdqgtj .gt_center {
   text-align: center;
 }
 
-#nutcpmebso .gt_right {
+#juazmdqgtj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#nutcpmebso .gt_font_normal {
+#juazmdqgtj .gt_font_normal {
   font-weight: normal;
 }
 
-#nutcpmebso .gt_font_bold {
+#juazmdqgtj .gt_font_bold {
   font-weight: bold;
 }
 
-#nutcpmebso .gt_font_italic {
+#juazmdqgtj .gt_font_italic {
   font-style: italic;
 }
 
-#nutcpmebso .gt_super {
+#juazmdqgtj .gt_super {
   font-size: 65%;
 }
 
-#nutcpmebso .gt_footnote_marks {
+#juazmdqgtj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#nutcpmebso .gt_asterisk {
+#juazmdqgtj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#nutcpmebso .gt_indent_1 {
+#juazmdqgtj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#nutcpmebso .gt_indent_2 {
+#juazmdqgtj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#nutcpmebso .gt_indent_3 {
+#juazmdqgtj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#nutcpmebso .gt_indent_4 {
+#juazmdqgtj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#nutcpmebso .gt_indent_5 {
+#juazmdqgtj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#nutcpmebso .katex-display {
+#juazmdqgtj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#nutcpmebso div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#juazmdqgtj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -4629,8 +4641,8 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
 <th id="tierart" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">tierart</th>
 <th id="Anzahl Proben" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Anzahl Proben</th>
 <th id="Prozent negativ" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Prozent negativ</th>
-<th id="Median [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Median [µg/kg]</th>
-<th id="kleinster Wert [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">kleinster Wert [µg/kg]</th>
+<th id="Mittelwert [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mittelwert [µg/kg]</th>
+<th id="Standard Abweichung" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Standard Abweichung</th>
 <th id="höchster Wert [µg/kg]" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">höchster Wert [µg/kg]</th>
 </tr>
 </thead>
@@ -4639,72 +4651,72 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
 <td class="gt_row gt_left" headers="tierart">Fisch</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">20</td>
 <td class="gt_row gt_right" headers="Prozent negativ">45</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">7</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">7</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">14</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">60</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="tierart">Kalb</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">107</td>
 <td class="gt_row gt_right" headers="Prozent negativ">0</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">8</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">2</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">8</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">7</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">42</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="tierart">Kaninchen</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">1</td>
 <td class="gt_row gt_right" headers="Prozent negativ">0</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">3</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">3</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">3</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">NA</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">3</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="tierart">Kuh</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">149</td>
 <td class="gt_row gt_right" headers="Prozent negativ">0</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">14</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">2</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">14</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">12</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">64</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="tierart">Rind</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">184</td>
 <td class="gt_row gt_right" headers="Prozent negativ">1</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">12</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">12</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">14</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">106</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="tierart">Schaf</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">38</td>
 <td class="gt_row gt_right" headers="Prozent negativ">3</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">10</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">10</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">11</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">56</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="tierart">Schwein</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">520</td>
 <td class="gt_row gt_right" headers="Prozent negativ">0</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">18</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">0</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">18</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">18</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">260</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="tierart">Ziege</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">6</td>
 <td class="gt_row gt_right" headers="Prozent negativ">0</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">12</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">3</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">12</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">8</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">21</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="tierart">Zuchtwild</td>
 <td class="gt_row gt_right" headers="Anzahl Proben">14</td>
 <td class="gt_row gt_right" headers="Prozent negativ">0</td>
-<td class="gt_row gt_right" headers="Median [µg/kg]">9</td>
-<td class="gt_row gt_right" headers="kleinster Wert [µg/kg]">2</td>
+<td class="gt_row gt_right" headers="Mittelwert [µg/kg]">9</td>
+<td class="gt_row gt_right" headers="Standard Abweichung">6</td>
 <td class="gt_row gt_right" headers="höchster Wert [µg/kg]">21</td>
 </tr>
 </tbody>
@@ -4750,23 +4762,23 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
 <span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">max</span>(hydrocortison_low)) <span class="sc">|&gt;</span> </span>
 <span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="vzoshsspxh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vzoshsspxh table {
+<div id="qxsbptcqoj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qxsbptcqoj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vzoshsspxh thead, #vzoshsspxh tbody, #vzoshsspxh tfoot, #vzoshsspxh tr, #vzoshsspxh td, #vzoshsspxh th {
+#qxsbptcqoj thead, #qxsbptcqoj tbody, #qxsbptcqoj tfoot, #qxsbptcqoj tr, #qxsbptcqoj td, #qxsbptcqoj th {
   border-style: none;
 }
 
-#vzoshsspxh p {
+#qxsbptcqoj p {
   margin: 0;
   padding: 0;
 }
 
-#vzoshsspxh .gt_table {
+#qxsbptcqoj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -4792,12 +4804,12 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-left-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_caption {
+#qxsbptcqoj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vzoshsspxh .gt_title {
+#qxsbptcqoj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -4809,7 +4821,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-width: 0;
 }
 
-#vzoshsspxh .gt_subtitle {
+#qxsbptcqoj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4821,7 +4833,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-top-width: 0;
 }
 
-#vzoshsspxh .gt_heading {
+#qxsbptcqoj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -4833,13 +4845,13 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_bottom_border {
+#qxsbptcqoj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_col_headings {
+#qxsbptcqoj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4854,7 +4866,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_col_heading {
+#qxsbptcqoj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4874,7 +4886,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   overflow-x: hidden;
 }
 
-#vzoshsspxh .gt_column_spanner_outer {
+#qxsbptcqoj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4886,15 +4898,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 4px;
 }
 
-#vzoshsspxh .gt_column_spanner_outer:first-child {
+#qxsbptcqoj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vzoshsspxh .gt_column_spanner_outer:last-child {
+#qxsbptcqoj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vzoshsspxh .gt_column_spanner {
+#qxsbptcqoj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -4906,11 +4918,11 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   width: 100%;
 }
 
-#vzoshsspxh .gt_spanner_row {
+#qxsbptcqoj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vzoshsspxh .gt_group_heading {
+#qxsbptcqoj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4936,7 +4948,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   text-align: left;
 }
 
-#vzoshsspxh .gt_empty_group_heading {
+#qxsbptcqoj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4951,15 +4963,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   vertical-align: middle;
 }
 
-#vzoshsspxh .gt_from_md > :first-child {
+#qxsbptcqoj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vzoshsspxh .gt_from_md > :last-child {
+#qxsbptcqoj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vzoshsspxh .gt_row {
+#qxsbptcqoj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4978,7 +4990,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   overflow-x: hidden;
 }
 
-#vzoshsspxh .gt_stub {
+#qxsbptcqoj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4991,7 +5003,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#vzoshsspxh .gt_stub_row_group {
+#qxsbptcqoj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5005,15 +5017,15 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   vertical-align: top;
 }
 
-#vzoshsspxh .gt_row_group_first td {
+#qxsbptcqoj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vzoshsspxh .gt_row_group_first th {
+#qxsbptcqoj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vzoshsspxh .gt_summary_row {
+#qxsbptcqoj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5023,16 +5035,16 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#vzoshsspxh .gt_first_summary_row {
+#qxsbptcqoj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_first_summary_row.thick {
+#qxsbptcqoj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vzoshsspxh .gt_last_summary_row {
+#qxsbptcqoj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5042,7 +5054,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_grand_summary_row {
+#qxsbptcqoj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5052,7 +5064,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#vzoshsspxh .gt_first_grand_summary_row {
+#qxsbptcqoj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5062,7 +5074,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-top-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_last_grand_summary_row_top {
+#qxsbptcqoj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5072,11 +5084,11 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_striped {
+#qxsbptcqoj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vzoshsspxh .gt_table_body {
+#qxsbptcqoj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5085,7 +5097,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-bottom-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_footnotes {
+#qxsbptcqoj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5099,7 +5111,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_footnote {
+#qxsbptcqoj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -5108,7 +5120,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#vzoshsspxh .gt_sourcenotes {
+#qxsbptcqoj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5122,7 +5134,7 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   border-right-color: #D3D3D3;
 }
 
-#vzoshsspxh .gt_sourcenote {
+#qxsbptcqoj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -5130,72 +5142,72 @@ $ hydrocortison_pos  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
   padding-right: 5px;
 }
 
-#vzoshsspxh .gt_left {
+#qxsbptcqoj .gt_left {
   text-align: left;
 }
 
-#vzoshsspxh .gt_center {
+#qxsbptcqoj .gt_center {
   text-align: center;
 }
 
-#vzoshsspxh .gt_right {
+#qxsbptcqoj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vzoshsspxh .gt_font_normal {
+#qxsbptcqoj .gt_font_normal {
   font-weight: normal;
 }
 
-#vzoshsspxh .gt_font_bold {
+#qxsbptcqoj .gt_font_bold {
   font-weight: bold;
 }
 
-#vzoshsspxh .gt_font_italic {
+#qxsbptcqoj .gt_font_italic {
   font-style: italic;
 }
 
-#vzoshsspxh .gt_super {
+#qxsbptcqoj .gt_super {
   font-size: 65%;
 }
 
-#vzoshsspxh .gt_footnote_marks {
+#qxsbptcqoj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vzoshsspxh .gt_asterisk {
+#qxsbptcqoj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vzoshsspxh .gt_indent_1 {
+#qxsbptcqoj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vzoshsspxh .gt_indent_2 {
+#qxsbptcqoj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vzoshsspxh .gt_indent_3 {
+#qxsbptcqoj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vzoshsspxh .gt_indent_4 {
+#qxsbptcqoj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vzoshsspxh .gt_indent_5 {
+#qxsbptcqoj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vzoshsspxh .katex-display {
+#qxsbptcqoj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vzoshsspxh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#qxsbptcqoj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
