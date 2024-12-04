@@ -1,7 +1,7 @@
 ---
 title: "Cortison- und Hydrocortisongehalte in tierischen Produkten"
 subtitle: "Datenauswertung von im Rahmen des nationalen Fremdstoffuntersuchungs Program gemessenen Proben"
-date: 10.12.2024
+date: 12.10.2024
 format: html
 editor: visual
 author: "Stephan Walker"
@@ -255,6 +255,8 @@ Werte unterhalbder Bestimmungsgrenze können zwischen 0 und der Bestimmungsgrenz
 ```{r}
 # Faktor
 jahreszeiten <- c("Frühling","Sommer","Herbst","Winter")
+
+matrix_sort <- c("Muskel", "Leber", "Niere", "Darm", "Blut", "Plasma", "Harn")
 ```
 
 ```{r}
@@ -293,8 +295,10 @@ ohne_NA <- input_data |>
     monat == 12 ~ "Winter",
     monat == 1 ~ "Winter",
     monat == 2 ~ "Winter"
-  ))|> # negativ = 1, positiv = 0
+  ))|>
   mutate(jahreszeit_fct = factor(jahreszeit, levels = jahreszeiten)) |> 
+  mutate(matrix_fct = factor(matrix, levels = matrix_sort)) |> 
+      # negativ = 1, positiv = 0     
   mutate(cortison_pos = case_when(
     cortison_low == 0 ~ 1,
     .default = 0
@@ -392,24 +396,44 @@ harn |>
 
 #| eval: true
 #| echo: true
+#| lable: "Tbl_Cortison_Matrix"
+#| tbl-cap: "Cortisongehalte in verschiedenen Matrizes"
+
+ohne_NA |> 
+  group_by("Matrix" = matrix_fct) |> 
+  summarise("Anzahl Proben" = n(),"Resultate < BG [%]" = round((sum(cortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(cortison_low),0),"Standard Abweichung [µg/kg]" = round(sd(cortison_low),0),"höchster Wert [µg/kg]" = max(cortison_low)) |> 
+
+  gt() |> 
+   tab_footnote(
+    footnote = "Anteil der Proben bei welchen kein Cortison bestimmt werden konnte.",
+    locations = cells_column_labels("Resultate < BG [%]"))
+
+
+
+```
+
+```{r}
+# übersicht Hydrocortison
+#| eval: true
+#| echo: true
 #| lable: "Tabelle"
 #| tbl-cap: "Gehalte nach Matrix"
 ohne_NA |> 
   group_by(matrix) |> 
-  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(cortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(cortison_low),0),"Standard Abweichung" = round(sd(cortison_low),0),"höchster Wert [µg/kg]" = max(cortison_low)) |> 
-  gt()
-# übersicht Hydrocortison  
-ohne_NA |> 
-  group_by(matrix) |> 
   summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
   gt()
+```
 
+```{r}
 # Muskel nach Tierart
+#| eval: true
+#| echo: true
+#| lable: "Tabelle"
+#| tbl-cap: "Gehalte nach Matrix"
 muskel |> 
    group_by(tierart) |> 
   summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
   gt()
-
 ```
 
 Daten überprüfen
@@ -439,16 +463,6 @@ Nach Tierart
 Tabelle Muskel
 
 ```{r}
-group_by(muskel, tierart) |> 
-  summarise(n(),
-            mean(cortison_low), 
-            min(cortison_low), 
-            max(cortison_low), 
-            mean(hydrocortison_low),
-            min(hydrocortison_low),
-            max(hydrocortison_low)) |> 
-  gt()
-
 ```
 
 # Ergebnisse
