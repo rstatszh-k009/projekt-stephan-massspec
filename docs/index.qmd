@@ -1,41 +1,27 @@
 ---
 title: "Cortison- und Hydrocortisongehalte in tierischen Produkten"
-subtitle: "Datenauswertung von im Rahmen des nationalen Fremdstoffuntersuchungs Program gemessenen Proben"
+subtitle: "Datenauswertung von im Rahmen des Nationalen Fremdstoffuntersuchungs Program gemessenen Proben"
 date: 12.10.2024
-format: html
+format: 
+  html:
+    toc: true
 editor: visual
 author: "Stephan Walker"
 editor_options: 
   chunk_output_type: console
 lang: de
+bibliography: references.bib
 ---
 
 # Einleitung
 
-Im Rahmen des Nationalen Fremdstoffuntersuchungs Programm (NFUP) wurden in Proben von tierischen Lebensmitteln die Rückstände von Cortison und Hydrocortison gemessen. Die Messung der Substanzen erfolgte mittels Flüssigchromatograghie (LC) gekoppelt mit hochauflösender Massenspektrometrie (HRMS). Dabei werden zwischen 45 und 200 Tierarzneimittel quantifiziert.
+Im Rahmen des Nationalen Fremdstoffuntersuchungs Programm (NFUP) wurden in Proben von tierischen Lebensmitteln die Rückstände von Cortison und Hydrocortison gemessen. Die Messung der Substanzen erfolgte mittels Flüssigchromatograghie (LC) gekoppelt mit hochauflösender Massenspektrometrie (HRMS)[@kaufmann2020],[@kaufmann2019]. Dabei werden zwischen 45 und 200 Tierarzneimittel quantifiziert.
 
 Cortison und Hydrocortison kommen natürlich in Produkten tierischer Herkunft vor. Für die Substanzen gibt es ausser für Milch keine Grenzwerte oder sonstige Beurteilungskriterien.
 
 Mit der folgenden Datenanalyse soll gezeit werden ob sich von den gemessenen Konzentrationen ein Beurteilungskriterium ableiten lässt oder ob die Substanzen als Positivkontrolle für die Methode verwendet werden können.
 
 Die Daten wurden zwischen 2019 bis 2024 erhoben.
-
-```{r}
-#| eval: true
-#| echo: true
-library(tidyverse)
-library(gt)
-```
-
-```{r}
-# read_csv2 für ";" geteilte Tabelle
-cortison_import <- read_csv2(here::here("daten/raw/Cortison_csv.csv"))
-hydrocortison_import <- read_csv2(here::here("daten/raw/Hydrocortison_csv.csv"))
-```
-
-# Daten
-
-Resultate der im Rahmen des NFUP durchgeführten Messungen durch die Abteilung Tierarzneimittel Analytik des Kantonalen Labors Zürich.
 
 ## Analyseziele
 
@@ -45,11 +31,41 @@ Gibt es Unterschiede zwischen einzelnen Matrizes? z.B Muskel und Leber
 
 Gibt es Unterschiede zwischen verschiedenen Tierarten? z.B. Rinder und Schweine
 
-# Datenaufbereitung
+Gibt es Veränderungen innerhalb eines Jahres oder zwischen den Jahren?
 
-Daten zusammenführen und Spaltentitel ändern
+# Daten
+
+Resultate der im Rahmen des NFUP durchgeführten Messungen durch die Abteilung Tierarzneimittel Analytik des Kantonalen Labors Zürich.
 
 ```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: false
+library(tidyverse)
+library(ggthemes)
+library(gt)
+```
+
+```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: false
+# read_csv2 für ";" geteilte Tabelle
+cortison_import <- read_csv2(here::here("daten/raw/Cortison_csv.csv"))
+hydrocortison_import <- read_csv2(here::here("daten/raw/Hydrocortison_csv.csv"))
+```
+
+# Datenaufbereitung
+
+Daten zusammenführen und Spaltentitel ändern. Die Tierart- und Matrixnamen wurden korrigiert und vereinheitlicht. Alle Messresultate wurden von Text in numerische Werte geändert.
+
+```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: false
 # merge mit all = TRUE um auch Proben mit nur einem Resultat in der Tabelle zu behalten
 data_merge <- merge(cortison_import, hydrocortison_import, by="ProbenID", all = TRUE)
 
@@ -221,39 +237,52 @@ data_matrix_tierart_date_methnr |>
   glimpse()
 ```
 
-summarize
+Daten in ein aufgeräumtes Datenframe übertragen
 
 ```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: false
 cortison_tidy <- data_matrix_tierart_date_methnr |> 
   group_by(ProbenID,cortison_conc,hydrocortison_conc,tierart,matrix,datum,methode) |> 
   summarise()
 ```
 
-exportieren
-
 ```{r}
+# Daten exportieren
+#| eval: false
+#| echo: false
+#| warning: false
+#| output: false
 
 # write_csv(x = cortison_tidy,
 #          "daten/processed/cortison_tidy.csv")
 ```
 
-Datum formatieren
-
-Import tidy data
+Erstellen eines neuen Dataframes mit den bearbeiteten Daten
 
 ```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: false
 #input_data <- read_csv(here::here("daten/processed/cortison_tidy.csv"))
 input_data <- cortison_tidy
 
 glimpse(input_data)
 ```
 
-### Bestimmungsgrenze
+### Faktoren
 
-Werte unterhalbder Bestimmungsgrenze können zwischen 0 und der Bestimmungsgrenze liegen. Für Methode ACN 1 µg/kg, für Methode EtAc 0.25 µg/kg
+Für eine bessere Übersicht wurden die Daten mit Faktoren sortiert. Es werden zuerst die festen Matrizes dargestellt und dann die flüssigen. Die Tierarten wurden so sortiert das die häufigsten Spezies wie Rind und Schwein zuerst dargestellt werden, wärend die selterenen Spezies unten aufgeführt werden.
 
 ```{r}
-# Faktor
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: true
+# Faktor für weitere verwendung bereitstellen
 jahreszeiten <- c("Frühling","Sommer","Herbst","Winter")
 
 matrix_sort <- c("Muskel", "Leber", "Niere", "Darm", "Blut", "Plasma", "Harn")
@@ -261,7 +290,13 @@ matrix_sort <- c("Muskel", "Leber", "Niere", "Darm", "Blut", "Plasma", "Harn")
 tierart_sort <- c("Rind", "Kuh", "Kalb", "Schwein", "Huhn", "Truthahn", "Schaf", "Ziege", "Zuchtwild", "Pferd", "Kaninchen", "Fisch")
 ```
 
+### Datenübersicht
+
 ```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: false
 ohne_NA <- input_data |> 
   mutate(cortison_low = case_when(
     cortison_conc = is.na(cortison_conc) ~ 0,
@@ -309,30 +344,73 @@ ohne_NA <- input_data |>
   mutate(hydrocortison_pos = case_when(
     hydrocortison_low == 0 ~ 1,
     .default = 0))
-    
-  
-glimpse(ohne_NA)
-ohne_NA |> 
-  count(bg)
-
-ohne_NA |> 
-  count(matrix)
-
-ohne_NA |> 
-  count(jahreszeit)
 ```
 
-In der Tabelle sind die Proben dargestellt
+In @Proben_NFUP sind alle Proben aufgelistet
 
 ```{r}
 #| eval: true
 #| echo: true
+#| warning: false
 #| lable: "Proben_NFUP"
 #| tbl-cap: "Proben im Datensatz"
 
 ohne_NA |> 
   group_by("Tierart" = tierart_fct, "Matrix" = matrix_fct) |> 
   summarise("Anzahl" = n()) |> 
+  gt(row_group_as_column = TRUE)
+
+```
+
+In @fig_Proben_NFUP_bar sind alle Proben dargestellt.
+
+```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| lable: "fig_Proben_NFUP_bar"
+#| fig-cap: "Proben im Datensatz Säulendiagram"
+ggplot(ohne_NA, mapping = aes(
+  x = tierart_fct,
+  fill = matrix_fct
+))+
+  geom_bar()+
+  geom_text(tierart_fct, matrix_fct, label = matrix_fct)
+
+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  xlab("Tierart")+
+  ylab("Anzahl Proben")+
+  labs(
+    title = "Tierart und Matrix der Proben",
+    fill = "Matrix"
+  )
+  
+ggplot(ohne_NA, mapping = aes(
+  x = tierart_fct,
+  y = martrix
+  fill = matrix_fct
+))+
+   geom_text(tierart_fct, matrix_fct, label = matrix_fct)
+  
+#  geom_text(aes(label = n), size = 3, vjust = -0.5)
+```
+
+### Bestimmungsgrenze
+
+Werte unterhalb der Bestimmungsgrenze können zwischen 0 µg/kg und der Bestimmungsgrenze liegen. Die verwendeten Methoden haben die Bestimmungsgrenze 0.25 µg/kg bzw. 1 µg/kg.
+
+Wie stark veränderen sich die Durchschnittswerte, wenn Proben ohne nachweisbare Cortison oder Hydrocortisonwerte (\< Bestimmunggrenze) mit dem Wert 0 oder dem Wert an der Bestimmungsgrenze zur berechnung verwendet werden?Einfluss der Bestimmungsgrenze.
+
+```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| lable: "tbl_Tabelle_low_bg"
+#| tbl-cap: "Veränderung des mittleren Gehaltes bei verwendung der Bestimmungsgrenze anstelle von 0"
+ohne_NA |>
+  group_by("Matrix" = matrix_fct) |> 
+  summarise("Anzahl Proben [n]" = n(),"Proben mit Cortison <BG [%]" = round(sum(cortison_pos)/n()*100,1),"Mittelwert Cortison <BG = 0 [µg/kg]" = round(mean(cortison_low),1),"Mittelwert Cortison <BG = BG [µg/kg]" = round(mean(cortison_bg),1), "Abweichung Mittelwert Cortison [%] [µg/kg]" = round((mean(cortison_bg)-mean(cortison_low))/mean(cortison_bg)*100,1),"Proben mit Hydrocortison <BG [%]" = round(sum(hydrocortison_pos)/n()*100,1),"Mittelwert Hydrocortison <BG = 0 [µg/kg]" = round(mean(hydrocortison_low),1),"Mittelwert Hydrocortison <BG = BG [µg/kg]" = round(mean(hydrocortison_bg),1), "Abweichung Mittelwert Hydrocortison [%]" = round((mean(hydrocortison_bg)-mean(hydrocortison_low))/mean(hydrocortison_bg)*100,1)) |> 
   gt()
 
 ```
@@ -340,6 +418,10 @@ ohne_NA |>
 Untergruppen erstellen
 
 ```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: false
 leber <- filter(ohne_NA, matrix == "Leber")
 
 niere <- filter(ohne_NA, matrix == "Niere")
@@ -352,11 +434,16 @@ schwein <- filter(ohne_NA, tierart == "Schwein")
 
 rinder <- filter(ohne_NA, tierart == "Rind" | tierart == "Kuh" | tierart == "Kalb")
 
-rinder |> 
-  count(tierart)
+schweine_muskel <- filter(schwein, matrix == "Muskel")
 ```
 
+# Ergebnisse
+
 ```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: true
 # boxplot hydrocortison
 ggplot(muskel, mapping = aes(
   x = jahreszeit_fct,
@@ -374,9 +461,14 @@ ggplot(harn, mapping = aes(
   geom_boxplot(outlier.shape = NA) +
   theme_minimal()+
   ylim(c(0,400))
+
 ```
 
 ```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: true
 # boxplot cortison
 ggplot(muskel, mapping = aes(
   x = jahreszeit_fct,
@@ -398,6 +490,10 @@ ggplot(harn, mapping = aes(
 ```
 
 ```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| output: true
 # Tabelle jahreszeit
 muskel |> 
   group_by(jahreszeit_fct) |> 
@@ -437,7 +533,7 @@ ohne_NA |>
 #| lable: "Tabelle"
 #| tbl-cap: "Gehalte nach Matrix"
 ohne_NA |> 
-  group_by(matrix) |> 
+  group_by(matrix_fct) |> 
   summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
   gt()
 ```
@@ -449,40 +545,94 @@ ohne_NA |>
 #| lable: "Tabelle"
 #| tbl-cap: "Gehalte nach Matrix"
 muskel |> 
-   group_by(tierart) |> 
+   group_by(tierart_fct) |> 
   summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
   gt()
 ```
 
-Daten überprüfen
+Gehalte in verschiedenen Matrizes am Beispiel von Schweinen
 
 ```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| lable: "matrix_box_cort"
+#| fig-cap: "Boxplot der Gehalte an Cortison in verschiedenen Schweinematrizes"
+ggplot(schwein, mapping = aes(
+  x = matrix_fct,
+  y = cortison_low
+))+
+    geom_boxplot(outlier.shape = NA) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        legend.position = "none")+
+  ylim(c(0,40))+
+  xlab("Tierart")+
+  ylab("Gehalt [µg/kg]")+
+  labs(
+    title = "Cortison Gehalte in Schweinen",
+    subtitle = "in µg/kg"
+    )
+
 
 ```
 
-# Daten Visualisierung
+```{r}
+#| eval: true
+#| echo: false
+#| warning: false
+#| lable: "matrix_box_hydro"
+#| fig-cap: "Boxplot der Gehalte an Hydrocortison in verschiedenen Schweinematrizes"
+ggplot(schwein, mapping = aes(
+  x = matrix_fct,
+  y = hydrocortison_low
+))+
+    geom_boxplot(outlier.shape = NA) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        legend.position = "none")+
+  ylim(c(0,40))+
+  xlab("Tierart")+
+  ylab("Gehalt [µg/kg]")+
+  labs(
+    title = "Hydrocortison Gehalte in Schweinen",
+    subtitle = "in µg/kg"
+    )
+
+```
+
+Gehalte in Muskelproben
 
 ```{r}
+#| eval: true
+#| echo: true
+#| lable: "muskel_box"
+#| fig-cap: "Boxplot der Gehalte an Hydrocortison in Muskel"
 # Verteilung in Muskel
-ggplot(muskel, mapping = aes(x = tierart,
-                             y = hydrocortison_low))+
+ggplot(muskel, mapping = aes(x = tierart_fct,
+                             y = hydrocortison_low,
+                             fill = tierart_fct))+
    geom_boxplot(outlier.shape = NA) +
-  theme_minimal()+
-  ylim(c(0,40))
-
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        legend.position = "none")+
+  ylim(c(0,40))+
+  xlab("Tierart")+
+  ylab("Gehalt [µg/kg]")+
+  labs(
+    title = "Hydrocortison Gehalte in Muskel",
+    subtitle = "in µg/kg"
+    )
 ```
 
-Nach Tierart
+Jahresstatistik Schweinemuskel
 
 ```{r}
-
+ggplot(schweine_muskel, mapping = aes(
+  x = jahreszeit_fct,
+  y = hydrocortison_low
+))+
+    
+  geom_boxplot()
 ```
-
-Tabelle Muskel
-
-```{r}
-```
-
-# Ergebnisse
 
 # Schlussfolgerung
+
+Literaturverzeichnis
