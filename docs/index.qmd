@@ -370,14 +370,18 @@ In @fig_Proben_NFUP_bar sind alle Proben dargestellt.
 #| warning: false
 #| lable: "fig_Proben_NFUP_bar"
 #| fig-cap: "Proben im Datensatz Säulendiagram"
-ggplot(ohne_NA, mapping = aes(
+anzahl_matrix_tierart <- ohne_NA |> 
+  group_by(tierart_fct) |> 
+  count(matrix_fct)
+
+ggplot(anzahl_matrix_tierart, mapping = aes(
   x = tierart_fct,
+  y = n,
   fill = matrix_fct
 ))+
-  geom_bar()+
-  geom_text(tierart_fct, matrix_fct, label = matrix_fct)
-
-
+  geom_col()+
+  geom_text(aes(label = n), 
+    position = position_stack(vjust = 0.5))+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
   xlab("Tierart")+
   ylab("Anzahl Proben")+
@@ -385,15 +389,6 @@ ggplot(ohne_NA, mapping = aes(
     title = "Tierart und Matrix der Proben",
     fill = "Matrix"
   )
-  
-ggplot(ohne_NA, mapping = aes(
-  x = tierart_fct,
-  y = martrix
-  fill = matrix_fct
-))+
-   geom_text(tierart_fct, matrix_fct, label = matrix_fct)
-  
-#  geom_text(aes(label = n), size = 3, vjust = -0.5)
 ```
 
 ### Bestimmungsgrenze
