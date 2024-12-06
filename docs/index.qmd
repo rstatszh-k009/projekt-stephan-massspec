@@ -358,7 +358,28 @@ In @Proben_NFUP sind alle Proben aufgelistet
 ohne_NA |> 
   group_by("Tierart" = tierart_fct, "Matrix" = matrix_fct) |> 
   summarise("Anzahl" = n()) |> 
-  gt(row_group_as_column = TRUE)
+  pivot_wider(names_from = "Matrix", values_from = "Anzahl") |> 
+  # nimmt die Gruppierung weg, was das Aussehen der gt Tabelle beeinflusst
+  ungroup() |> 
+  # entfernt Tierart Überschrift, fügt vertikale fette Linie hizu
+  gt(rowname_col = "Tierart") |> 
+  # definiert einen Spanner (Titel) für die ausgewählten Variablen
+  tab_spanner(
+    label = "Matrix",
+    columns = Muskel:Darm
+  ) |> 
+  # Setzt Dashes für NAs
+  fmt_missing(columns = everything(), missing_text = "–") |> 
+  # Macht Matrix bold
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_spanners()
+  ) |> 
+  # Macht die Spaltennamen bold
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()
+  ) 
 
 ```
 
