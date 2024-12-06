@@ -1,1 +1,7 @@
 variable_name,beschreibung
+ProbenID, [chr]Identifikation der einzelnen Probe
+cortison_conc, [num] in Probe gemessene Konzentration an Cortison
+hydrocortison_conc, [num] in Probe gemessene Konzentration an Hydrocortison
+tierart, [chr] Tierart von welcher die Probe stammt
+matrix, [chr] Probenmaterial
+datum, [chr] Datum der Probenerhebung
