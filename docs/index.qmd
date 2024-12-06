@@ -362,7 +362,7 @@ ohne_NA |>
 
 ```
 
-In @fig_Proben_NFUP_bar sind alle Proben dargestellt.
+#### In @fig_Proben_NFUP_bar sind alle Proben dargestellt.
 
 ```{r}
 #| eval: true
@@ -381,7 +381,10 @@ ggplot(anzahl_matrix_tierart, mapping = aes(
 ))+
   geom_col()+
   geom_text(aes(label = n), 
-    position = position_stack(vjust = 0.5))+
+    position = position_stack(vjust = 0.5),
+    na.rm = TRUE,
+    check_overlap = TRUE,
+    size = 3)+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
   xlab("Tierart")+
   ylab("Anzahl Proben")+
@@ -410,7 +413,7 @@ ohne_NA |>
 
 ```
 
-Untergruppen erstellen
+### Untergruppen erstellen
 
 ```{r}
 #| eval: true
@@ -430,34 +433,13 @@ schwein <- filter(ohne_NA, tierart == "Schwein")
 rinder <- filter(ohne_NA, tierart == "Rind" | tierart == "Kuh" | tierart == "Kalb")
 
 schweine_muskel <- filter(schwein, matrix == "Muskel")
+
+muskel_ohne_minor <- filter(muskel, tierart == "Rind"  | tierart == "Kuh" | tierart == "Kalb" | tierart == "Schwein")
+
+harn_ohne_minor <- filter(harn, tierart == "Rind"  | tierart == "Kuh" | tierart == "Kalb" | tierart == "Schwein")
 ```
 
 # Ergebnisse
-
-```{r}
-#| eval: true
-#| echo: true
-#| warning: false
-#| output: true
-# boxplot hydrocortison
-ggplot(muskel, mapping = aes(
-  x = jahreszeit_fct,
-  y = hydrocortison_low
-)) +
-  geom_boxplot(outlier.shape = NA) +
-  theme_minimal()+
-  ylim(c(0,40))
-
-# boxplot hydrocortison
-ggplot(harn, mapping = aes(
-  x = jahreszeit_fct,
-  y = hydrocortison_low
-)) +
-  geom_boxplot(outlier.shape = NA) +
-  theme_minimal()+
-  ylim(c(0,400))
-
-```
 
 ```{r}
 #| eval: true
@@ -617,15 +599,54 @@ ggplot(muskel, mapping = aes(x = tierart_fct,
     )
 ```
 
-Jahresstatistik Schweinemuskel
+### Saisonale Unterschiede
 
 ```{r}
-ggplot(schweine_muskel, mapping = aes(
+#| eval: true
+#| echo: true
+#| lable: "jahreszeit_box_muskel"
+#| fig-cap: "Boxplot Hydrocortison in Muskel nach Jahreszeit"
+
+ggplot(muskel_ohne_minor, mapping = aes(
   x = jahreszeit_fct,
-  y = hydrocortison_low
+  y = hydrocortison_low,
+  fill = jahreszeit_fct
 ))+
     
-  geom_boxplot()
+  geom_boxplot(outlier.shape = NA)+
+  facet_wrap(~tierart_fct)+
+  ylim(c(0,50))+
+  xlab("Jahreszeit")+
+  ylab("Gehalt [µg/kg]")+
+  labs(
+    title = "Jahreszeitliche Unterschiede von Hydrocortison Gehalten",
+    subtitle = "in Muskel"
+    )+
+  theme(legend.position = "none")
+```
+
+```{r}
+#| eval: true
+#| echo: true
+#| lable: "jahreszeit_box_harn"
+#| fig-cap: "Boxplot Hydrocortison in Harn nach Jahreszeit"
+
+ggplot(harn_ohne_minor, mapping = aes(
+  x = jahreszeit_fct,
+  y = hydrocortison_low,
+  fill = jahreszeit_fct
+))+
+    
+  geom_boxplot(outlier.shape = NA)+
+  facet_wrap(~tierart_fct)+
+  ylim(c(0,400))+
+  xlab("Jahreszeit")+
+  ylab("Gehalt [µg/l]")+
+  labs(
+    title = "Jahreszeitliche Unterschiede von Hydrocortison Gehalten",
+    subtitle = "in Harn"
+    )+
+  theme(legend.position = "none")
 ```
 
 # Schlussfolgerung
