@@ -27,11 +27,11 @@ Die Daten wurden zwischen 2019 bis 2024 erhoben.
 
 Es soll gezeigt werden wie sich die Konzentrationen von Cortison und Hydrocortison in den mehr als 2000 Messungen verteilen.
 
-Gibt es Unterschiede zwischen einzelnen Matrizes? z.B Muskel und Leber
+Gibt es Unterschiede zwischen einzelnen Matrizes?
 
-Gibt es Unterschiede zwischen verschiedenen Tierarten? z.B. Rinder und Schweine
+Gibt es Unterschiede zwischen verschiedenen Tierarten?
 
-Gibt es Veränderungen innerhalb eines Jahres oder zwischen den Jahren?
+Gibt es Jahreszeitliche Unterschiede?
 
 # Daten
 
@@ -462,45 +462,7 @@ harn_ohne_minor <- filter(harn, tierart == "Rind"  | tierart == "Kuh" | tierart 
 
 # Ergebnisse
 
-```{r}
-#| eval: true
-#| echo: true
-#| warning: false
-#| output: true
-# boxplot cortison
-ggplot(muskel, mapping = aes(
-  x = jahreszeit_fct,
-  y = cortison_low
-)) +
-  geom_boxplot(outlier.shape = NA) +
-  theme_minimal()+
-  ylim(c(0,15))
-
-
-# boxplot cortison
-ggplot(harn, mapping = aes(
-  x = jahreszeit_fct,
-  y = cortison_low
-)) +
-  geom_boxplot(outlier.shape = NA) +
-  theme_minimal()+
-  ylim(c(0,150))
-```
-
-```{r}
-#| eval: true
-#| echo: true
-#| warning: false
-#| output: true
-# Tabelle jahreszeit
-muskel |> 
-  group_by(jahreszeit_fct) |> 
-  summarise(mean(cortison_low), mean(hydrocortison_low))
-
-harn |> 
-  group_by(jahreszeit_fct) |> 
-  summarise(mean(cortison_low), mean(hydrocortison_low))
-```
+### Cortison Gehalte über alle Proben
 
 ```{r}
 # Tabelle mit positiven
@@ -524,16 +486,21 @@ ohne_NA |>
 
 ```
 
+### Hydrocortison Gehalte über alle Proben
+
 ```{r}
 # übersicht Hydrocortison
 #| eval: true
 #| echo: true
-#| lable: "Tabelle"
-#| tbl-cap: "Gehalte nach Matrix"
+#| lable: "Tbl_Hydrocortison_Matrix"
+#| tbl-cap: "HHydrocortisongehalte in verschiedenen Matrizes"
 ohne_NA |> 
-  group_by(matrix_fct) |> 
-  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
-  gt()
+  group_by("Matrix" = matrix_fct) |> 
+  summarise("Anzahl Proben" = n(),"Resultate < BG [%]" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
+  gt()|> 
+   tab_footnote(
+    footnote = "Anteil der Proben bei welchen kein Hydrocortison bestimmt werden konnte.",
+    locations = cells_column_labels("Resultate < BG [%]"))
 ```
 
 ```{r}
