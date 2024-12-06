@@ -5,6 +5,7 @@ date: 12.10.2024
 format: 
   html:
     toc: true
+    toc-expand: true
 editor: visual
 author: "Stephan Walker"
 editor_options: 
@@ -25,7 +26,7 @@ Die Daten wurden zwischen 2019 bis 2024 erhoben.
 
 ## Analyseziele
 
-Es soll gezeigt werden wie sich die Konzentrationen von Cortison und Hydrocortison in den mehr als 2000 Messungen verteilen.
+Es soll gezeigt werden wie sich die Konzentrationen von Cortison und Hydrocortison in den mehr als 3000 Messungen verteilen.
 
 Gibt es Unterschiede zwischen einzelnen Matrizes?
 
@@ -458,9 +459,19 @@ schweine_muskel <- filter(schwein, matrix == "Muskel")
 muskel_ohne_minor <- filter(muskel, tierart == "Rind"  | tierart == "Kuh" | tierart == "Kalb" | tierart == "Schwein")
 
 harn_ohne_minor <- filter(harn, tierart == "Rind"  | tierart == "Kuh" | tierart == "Kalb" | tierart == "Schwein")
+
+alle_matrizes_ohen_minor <- filter(ohne_NA,tierart == "Rind"  | tierart == "Kuh" | tierart == "Kalb" | tierart == "Schwein")
 ```
 
 # Ergebnisse
+
+
+In den gemessenen Proben zeigen sich grosse Unterschiede zwischen den einzelnen Messungen. Die Gehalte an Cortison und Hydrocortison sind teilweise unterhalb der Bestimmungsgrenze bis zu Maximalwerten für Cortison von 2887 µg/l und 3940 µg/l in Harnproben.
+
+Weiter konnte auch gezeigt werden das Gehalte zwischen den Matrizes sich stark unterscheiden (siehe @matrix_box_cort und @matrix_box_hydrocort). Es fällt auf das Cortison vorwiegend in der Matrix Niere und Harn vorkommt wärend Hydrocortison in allen Matrizes zu finden ist wobei die Gehalte in der Leber tiefer waren.
+
+Zwischen den Tierarten wurde nur die Matrix Muskel verglichen da von den meisten Tieren nur diese Matrix beprobt wurde (siehe @tierart_box_cort und @tierart_box_hydrocort). Dabei hat sich gezeigt das bei Schweinen und Fischen höhere Mengen an Cortison gefunden werden, wärend bei Tieren der Rindergattung keine Werte über der Bestimmungsgrenze gemessen wurden. In 99 % aller Muskelproben wurde hydrocortison nachgewiesen (siehe @Tbl_Hydrocortison_Matrix).
+
 
 ### Cortison Gehalte über alle Proben
 
@@ -493,7 +504,7 @@ ohne_NA |>
 #| eval: true
 #| echo: true
 #| lable: "Tbl_Hydrocortison_Matrix"
-#| tbl-cap: "HHydrocortisongehalte in verschiedenen Matrizes"
+#| tbl-cap: "Hydrocortisongehalte in verschiedenen Matrizes"
 ohne_NA |> 
   group_by("Matrix" = matrix_fct) |> 
   summarise("Anzahl Proben" = n(),"Resultate < BG [%]" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
@@ -503,29 +514,20 @@ ohne_NA |>
     locations = cells_column_labels("Resultate < BG [%]"))
 ```
 
-```{r}
-# Muskel nach Tierart
-#| eval: true
-#| echo: true
-#| lable: "Tabelle"
-#| tbl-cap: "Gehalte nach Matrix"
-muskel |> 
-   group_by(tierart_fct) |> 
-  summarise("Anzahl Proben" = n(),"Prozent negativ" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
-  gt()
-```
+### Matrix
 
-Gehalte in verschiedenen Matrizes am Beispiel von Schweinen
-
+Es wurden nur die Daten von Tieren der Rindergattung und Schweinen ausgewertet, da von den anderen Tierarten nicht alle Matrizes analysiert wurden.
+#### Cortison
 ```{r}
 #| eval: true
 #| echo: true
 #| warning: false
 #| lable: "matrix_box_cort"
-#| fig-cap: "Boxplot der Gehalte an Cortison in verschiedenen Schweinematrizes"
-ggplot(schwein, mapping = aes(
+#| fig-cap: "Boxplot der Gehalte an Cortison in verschiedenen Matrizes"
+ggplot(alle_matrizes_ohen_minor, mapping = aes(
   x = matrix_fct,
-  y = cortison_low
+  y = cortison_low,
+  fill = matrix_fct
 ))+
     geom_boxplot(outlier.shape = NA) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
@@ -534,22 +536,24 @@ ggplot(schwein, mapping = aes(
   xlab("Tierart")+
   ylab("Gehalt [µg/kg]")+
   labs(
-    title = "Cortison Gehalte in Schweinen",
+    title = "Cortison Gehalte",
     subtitle = "in µg/kg"
-    )
+    )+
+  facet_wrap(~tierart_fct)
 
 
 ```
-
+#### Hydrocortison
 ```{r}
 #| eval: true
-#| echo: false
+#| echo: true
 #| warning: false
-#| lable: "matrix_box_hydro"
-#| fig-cap: "Boxplot der Gehalte an Hydrocortison in verschiedenen Schweinematrizes"
-ggplot(schwein, mapping = aes(
+#| lable: "matrix_box_hydrocort"
+#| fig-cap: "Boxplot der Gehalte an Hydrocortison in verschiedenen Matrizes"
+ggplot(alle_matrizes_ohen_minor, mapping = aes(
   x = matrix_fct,
-  y = hydrocortison_low
+  y = hydrocortison_low,
+  fill = matrix_fct
 ))+
     geom_boxplot(outlier.shape = NA) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
@@ -558,18 +562,42 @@ ggplot(schwein, mapping = aes(
   xlab("Tierart")+
   ylab("Gehalt [µg/kg]")+
   labs(
-    title = "Hydrocortison Gehalte in Schweinen",
+    title = "Hydrocortison Gehalte",
     subtitle = "in µg/kg"
-    )
+    )+
+  facet_wrap(~tierart_fct)
+
 
 ```
 
-Gehalte in Muskelproben
+### Tierart
+#### Cortison
 
 ```{r}
 #| eval: true
 #| echo: true
-#| lable: "muskel_box"
+#| lable: "tierart_box_cort"
+#| fig-cap: "Boxplot der Gehalte an Cortison in Muskel"
+# Verteilung in Muskel
+ggplot(muskel, mapping = aes(x = tierart_fct,
+                             y = cortison_low,
+                             fill = tierart_fct))+
+   geom_boxplot(outlier.shape = NA) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        legend.position = "none")+
+  ylim(c(0,15))+
+  xlab("Tierart")+
+  ylab("Gehalt [µg/kg]")+
+  labs(
+    title = "Cortison Gehalte in Muskel",
+    subtitle = "in µg/kg"
+    )
+```
+#### Hydrocortison
+```{r}
+#| eval: true
+#| echo: true
+#| lable: "tierart_box_hydrocort"
 #| fig-cap: "Boxplot der Gehalte an Hydrocortison in Muskel"
 # Verteilung in Muskel
 ggplot(muskel, mapping = aes(x = tierart_fct,
@@ -639,4 +667,21 @@ ggplot(harn_ohne_minor, mapping = aes(
 
 # Schlussfolgerung
 
-Literaturverzeichnis
+
+```{r}
+#| eval: false
+#| echo: false
+ohne_NA |> 
+  group_by(matrix_fct) |>
+  summarise(max(cortison_low))
+
+ohne_NA |> 
+  group_by(matrix_fct) |>
+  summarise(max(hydrocortison_low))
+  
+```
+
+
+
+
+##Literaturverzeichnis
