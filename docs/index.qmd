@@ -1,9 +1,10 @@
 ---
-title: "Cortison- und Hydrocortisongehalte in tierischen Produkten"
-subtitle: "Datenauswertung von im Rahmen des Nationalen Fremdstoffuntersuchungs Program gemessenen Proben"
+title: "Cortison- und Hydrocortisongehalte in Proben tierischen Ursprungs"
+subtitle: "Datenauswertung von im Rahmen des Nationalen Fremdstoffuntersuchungs Programm gemessenen Proben"
 date: 12.10.2024
 format: 
   html:
+    embed-resources: true
     toc: true
     toc-expand: true
 editor: visual
@@ -18,7 +19,7 @@ bibliography: references.bib
 
 Im Rahmen des Nationalen Fremdstoffuntersuchungs Programm (NFUP) wurden in Proben von tierischem Ursprung die Rückstände von Cortison und Hydrocortison gemessen. Die Messung der Substanzen erfolgte mittels Flüssigchromatograghie (LC) gekoppelt mit hochauflösender Massenspektrometrie (HRMS)[@kaufmann2020],[@kaufmann2019]. Dabei wurden zwischen 45 und 200 Tierarzneimittel quantifiziert.
 
-Cortison und Hydrocortison kommen natürlich in Produkten tierischer Herkunft vor. Für die Substanzen gibt es ausser für Milch keine Grenzwerte oder sonstige Beurteilungskriterien.
+Cortison und Hydrocortison kommen natürlich in Gwebe und Ausscheidungen von Tieren vor, <https://de.wikipedia.org/wiki/Cortison>. Für die Substanzen gibt es ausser für Milch keine Grenzwerte oder sonstige Beurteilungskriterien.
 
 Mit der folgenden Datenanalyse soll gezeigt werden, ob sich von den gemessenen Konzentrationen ein Beurteilungskriterium ableiten lässt oder ob die Substanzen als Positivkontrolle für die Methode verwendet werden können.
 
@@ -347,14 +348,11 @@ ohne_NA <- input_data |>
     .default = 0))
 ```
 
-In @Proben_NFUP sind alle Proben aufgelistet
 
 ```{r}
-#| eval: true
-#| echo: true
-#| warning: false
-#| lable: "Proben_NFUP"
+#| lable: tbl-proben
 #| tbl-cap: "Proben im Datensatz"
+#| warning: false
 
 ohne_NA |> 
   group_by("Tierart" = tierart_fct, "Matrix" = matrix_fct) |> 
@@ -384,14 +382,17 @@ ohne_NA |>
 
 ```
 
-#### In @fig_Proben_NFUP_bar sind alle Proben dargestellt.
+
+In @tbl-proben sind alle Proben aufgelistet
+
+In @fig-probenNFUPbar sind alle Proben dargestellt.
 
 ```{r}
-#| eval: true
-#| echo: true
-#| warning: false
-#| lable: "fig_Proben_NFUP_bar"
+#| lable: fig-probenNFUPbar
 #| fig-cap: "Proben im Datensatz Säulendiagram"
+#| warning: false
+
+
 anzahl_matrix_tierart <- ohne_NA |> 
   group_by(tierart_fct) |> 
   count(matrix_fct)
@@ -423,11 +424,13 @@ Werte unterhalb der Bestimmungsgrenze können zwischen 0 µg/kg und der Bestimmu
 Wie stark verändern sich die Durchschnittswerte, wenn Proben ohne nachweisbare Cortison oder Hydrocortisonwerte (\< Bestimmungsgrenze) mit dem Wert 0 oder dem Wert an der Bestimmungsgrenze zur Berechnung verwendet werden?
 
 ```{r}
+#| lable: tbl-Tabellelowbg
+#| tbl-cap: "Veränderung des mittleren Gehaltes bei verwendung der Bestimmungsgrenze anstelle von 0"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "tbl_Tabelle_low_bg"
-#| tbl-cap: "Veränderung des mittleren Gehaltes bei verwendung der Bestimmungsgrenze anstelle von 0"
+
+
 ohne_NA |>
   group_by("Matrix" = matrix_fct) |> 
   summarise("Proben mit Cortison <BG [%]" = round(sum(cortison_pos)/n()*100,1),"Mittelwert Cortison <BG = 0 [µg/kg]" = round(mean(cortison_low),1),"Mittelwert Cortison <BG = BG [µg/kg]" = round(mean(cortison_bg),1), "Abweichung Mittelwert Cortison [%] [µg/kg]" = round((mean(cortison_bg)-mean(cortison_low))/mean(cortison_bg)*100,1),"Proben mit Hydrocortison <BG [%]" = round(sum(hydrocortison_pos)/n()*100,1),"Mittelwert Hydrocortison <BG = 0 [µg/kg]" = round(mean(hydrocortison_low),1),"Mittelwert Hydrocortison <BG = BG [µg/kg]" = round(mean(hydrocortison_bg),1), "Abweichung Mittelwert Hydrocortison [%]" = round((mean(hydrocortison_bg)-mean(hydrocortison_low))/mean(hydrocortison_bg)*100,1)) |> 
@@ -471,9 +474,9 @@ alle_matrizes_ohen_minor <- filter(ohne_NA,tierart == "Rind"  | tierart == "Kuh"
 
 In den gemessenen Proben zeigen sich grosse Unterschiede zwischen den einzelnen Messungen. Die Gehalte an Cortison und Hydrocortison sind teilweise unterhalb der Bestimmungsgrenze bis zu Maximalwerten für Cortison von 2887 µg/l und 3940 µg/l in Harnproben.
 
-Weiter konnte auch gezeigt werden das Gehalte zwischen den Matrizes sich stark unterscheiden (siehe @matrix_box_cort und @matrix_box_hydrocort). Es fällt auf das Cortison vorwiegend in der Matrix Niere und Harn vorkommt, während Hydrocortison in allen Matrizes zu finden ist wobei die Gehalte in der Leber tiefer waren.
+Weiter konnte auch gezeigt werden das Gehalte zwischen den Matrizes sich stark unterscheiden (siehe @fig-matrixboxcort und @fig-matrixboxhydrocort). Es fällt auf das Cortison vorwiegend in der Matrix Niere und Harn vorkommt, während Hydrocortison in allen Matrizes zu finden ist wobei die Gehalte in der Leber tiefer waren.
 
-Zwischen den Tierarten wurde nur die Matrix Muskel verglichen da von den meisten Tieren nur diese Matrix beprobt wurde (siehe @tierart_box_cort und @tierart_box_hydrocort). Dabei hat sich gezeigt, dass bei Schweinen und Fischen höhere Mengen an Cortison gefunden werden, während bei Tieren der Rindergattung nur wenige Proben Werte über der Bestimmungsgrenze aufweisen. In 99 % aller Muskelproben wurde Hydrocortison nachgewiesen (siehe @Tbl_Hydrocortison_Matrix).
+Zwischen den Tierarten wurde nur die Matrix Muskel verglichen da von den meisten Tieren nur diese Matrix beprobt wurde (siehe @fig-tierartboxcort und @fig-tierartboxhydrocort). Dabei hat sich gezeigt, dass bei Schweinen und Fischen höhere Mengen an Cortison gefunden werden, während bei Tieren der Rindergattung nur wenige Proben Werte über der Bestimmungsgrenze aufweisen. In 99 % aller Muskelproben wurde Hydrocortison nachgewiesen (siehe @tbl-TblHydrocortisonMatrix).
 
 ### Matrix
 
@@ -482,11 +485,12 @@ Es wurden nur die Daten von Tieren der Rindergattung und Schweinen für die Visu
 #### Cortison
 
 ```{r}
+#| lable: tbl-TblCortisonMatrix
+#| tbl-cap: "Cortisongehalte in verschiedenen Matrizes"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "Tbl_Cortison_Matrix"
-#| tbl-cap: "Cortisongehalte in verschiedenen Matrizes"
+
 
 ohne_NA |> 
   group_by("Matrix" = matrix_fct) |> 
@@ -502,11 +506,12 @@ ohne_NA |>
 ```
 
 ```{r}
+#| lable: fig-matrixboxcort
+#| fig-cap: "Boxplot der Gehalte an Cortison in verschiedenen Matrizes"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "matrix_box_cort"
-#| fig-cap: "Boxplot der Gehalte an Cortison in verschiedenen Matrizes"
+
 ggplot(alle_matrizes_ohen_minor, mapping = aes(
   x = matrix_fct,
   y = cortison_low,
@@ -529,11 +534,12 @@ ggplot(alle_matrizes_ohen_minor, mapping = aes(
 #### Hydrocortison
 
 ```{r}
+#| lable: tbl-TblHydrocortisonMatrix
+#| tbl-cap: "Hydrocortisongehalte in verschiedenen Matrizes"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "Tbl_Hydrocortison_Matrix"
-#| tbl-cap: "Hydrocortisongehalte in verschiedenen Matrizes"
+
 ohne_NA |> 
   group_by("Matrix" = matrix_fct) |> 
   summarise("Anzahl Proben" = n(),"Resultate < BG [%]" = round((sum(hydrocortison_pos/n()))*100,0),"Mittelwert [µg/kg]" = round(mean(hydrocortison_low),0), "Standard Abweichung" = round(sd(hydrocortison_low),0),"höchster Wert [µg/kg]" = max(hydrocortison_low)) |> 
@@ -544,11 +550,12 @@ ohne_NA |>
 ```
 
 ```{r}
+#| lable: fig-matrixboxhydrocort
+#| fig-cap: "Boxplot der Gehalte an Hydrocortison in verschiedenen Matrizes"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "matrix_box_hydrocort"
-#| fig-cap: "Boxplot der Gehalte an Hydrocortison in verschiedenen Matrizes"
+
 ggplot(alle_matrizes_ohen_minor, mapping = aes(
   x = matrix_fct,
   y = hydrocortison_low,
@@ -573,11 +580,12 @@ ggplot(alle_matrizes_ohen_minor, mapping = aes(
 #### Hydrocortison in Muskelproben von Tieren der Rindergattung und Schweinen
 
 ```{r}
+#| lable: fig-muskelhisthydrocort
+#| fig-cap: "Histogramm der Gehalte an Hydrocortison in Muskel"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "muskel_hist_hydrocort"
-#| fig-cap: "Histogram der Gehalte an Hydrocortison in Muskel"
+
 
 ggplot(muskel_ohne_minor, mapping = aes(
   x = hydrocortison_low,
@@ -591,11 +599,12 @@ ggplot(muskel_ohne_minor, mapping = aes(
 ```
 
 ```{r}
+#| lable: tbl-muskelhydrocort
+#| tbl-cap: "Gehalte an Hydrocortison in Muskel"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "muskel_hist_hydrocort"
-#| tbl-cap: "Histogram der Gehalte an Hydrocortison in Muskel"
+
 
 muskel_ohne_minor |> 
   group_by(tierart) |> 
@@ -608,11 +617,12 @@ muskel_ohne_minor |>
 #### Cortison
 
 ```{r}
+#| lable: tbl-TblCortisontiermuskel
+#| tbl-cap: "Cortisongehalte in Muskel von verschiedenen Tierarten"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "Tbl_Cortison_tier_muskel"
-#| tbl-cap: "Cortisongehalte in Muskel von verschiedenen Tierarten"
+
 
 muskel |> 
   group_by("Tierart" = tierart_fct) |> 
@@ -627,12 +637,12 @@ muskel |>
 ```
 
 ```{r}
+#| lable: fig-tierartboxcort
+#| fig-cap: "Boxplot der Gehalte an Cortison in Muskel"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "tierart_box_cort"
-#| fig-cap: "Boxplot der Gehalte an Cortison in Muskel"
-# Verteilung in Muskel
+
 ggplot(muskel, mapping = aes(x = tierart_fct,
                              y = cortison_low,
                              fill = tierart_fct))+
@@ -652,11 +662,12 @@ ggplot(muskel, mapping = aes(x = tierart_fct,
 #### Hydrocortison
 
 ```{r}
+#| lable: tbl-TblHydrocortisontiermuskel
+#| tbl-cap: "Hydrocortisongehalte in Muskel von verschiedenen Tierarten"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "Tbl_Hydrocortison_tier_muskel"
-#| tbl-cap: "Hydrocortisongehalte in Muskel von verschiedenen Tierarten"
+
 
 muskel |> 
   group_by("Tierart" = tierart_fct) |> 
@@ -671,12 +682,13 @@ muskel |>
 ```
 
 ```{r}
+#| lable: fig-tierartboxhydrocort
+#| fig-cap: "Boxplot der Gehalte an Hydrocortison in Muskel"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "tierart_box_hydrocort"
-#| fig-cap: "Boxplot der Gehalte an Hydrocortison in Muskel"
-# Verteilung in Muskel
+
+
 ggplot(muskel, mapping = aes(x = tierart_fct,
                              y = hydrocortison_low,
                              fill = tierart_fct))+
@@ -696,11 +708,12 @@ ggplot(muskel, mapping = aes(x = tierart_fct,
 ### Saisonale Unterschiede
 
 ```{r}
+#| lable: fig-jahreszeitboxmuskel
+#| fig-cap: "Boxplot Hydrocortison in Muskel nach Jahreszeit"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "jahreszeit_box_muskel"
-#| fig-cap: "Boxplot Hydrocortison in Muskel nach Jahreszeit"
+
 
 ggplot(muskel_ohne_minor, mapping = aes(
   x = jahreszeit_fct,
@@ -722,11 +735,12 @@ ggplot(muskel_ohne_minor, mapping = aes(
 ```
 
 ```{r}
+#| lable: fig-jahreszeitboxharn
+#| fig-cap: "Boxplot Hydrocortison in Harn nach Jahreszeit"
 #| eval: true
 #| echo: true
 #| warning: false
-#| lable: "jahreszeit_box_harn"
-#| fig-cap: "Boxplot Hydrocortison in Harn nach Jahreszeit"
+
 
 ggplot(harn_ohne_minor, mapping = aes(
   x = jahreszeit_fct,
@@ -749,11 +763,11 @@ ggplot(harn_ohne_minor, mapping = aes(
 
 # Schlussfolgerung
 
-Zwischen den verschiedenen Matrizes gibt es teilweise grosse Unterschiede (siehe @Tbl_Cortison_Matrix und @Tbl_Hydrocortison_Matrix. In Nieren wurden hohe Werte Cortison gemessen dafür weniger Hydrocortison. In Lebern wurden nur wenig Cortison und Hydrocortison gefunden. In den meisten Muskelproben wurde Hydrocortison nachgewiesen (siehe @muskel_hist_hydrocort).
+Zwischen den verschiedenen Matrizes gibt es teilweise grosse Unterschiede (siehe @tbl-TblCortisonMatrix und @tbl-TblHydrocortisonMatrix. In Nieren wurden hohe Werte Cortison gemessen dafür weniger Hydrocortison. In Lebern wurden nur wenig Cortison und Hydrocortison gefunden. In den meisten Muskelproben wurde Hydrocortison nachgewiesen (siehe @fig-muskelhisthydrocort).
 
 Die Menge an gefundenem Cortison und Hydrocortison scheint von der Tierart abhängig zu sein. In Muskelproben von Schweinen wird deutlich mehr Cortison gemessen als in Proben von Tieren der Rindergattung. Auch in Fischmuskel wurde mehr Cortison gemessen jedoch ist die Probenanzahl von 20 zu klein um eine Aussage zutreffen.
 
-Eine Jahreszeitliche Abhängigkeit der Hydrocortison Werte konnte nicht eindutig gezeigt werden (siehe @jahreszeit_box_muskel und @jahreszeit_box_harn). Die gefundenen Unterschiede sind eher gering und von den Schweinen wurden keine Harnproben im Herbst erhoben.
+Eine Jahreszeitliche Abhängigkeit der Hydrocortison Werte konnte nicht eindutig gezeigt werden (siehe @fig-jahreszeitboxmuskel und @fig-jahreszeitboxharn). Die gefundenen Unterschiede sind eher gering und von den Schweinen wurden keine Harnproben im Herbst erhoben.
 
 ### Cortison und Hydrocortison als Methodenkontrolle
 
@@ -765,6 +779,8 @@ In Muskelproben wurden in 99 % aller Proben Hydrocortison über der Bestimmungsg
 #| eval: false
 #| echo: false
 #| warning: false
+
+
 ohne_NA |> 
   group_by(matrix_fct) |>
   summarise(max(cortison_low))
