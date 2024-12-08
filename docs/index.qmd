@@ -470,9 +470,9 @@ alle_matrizes_ohen_minor <- filter(ohne_NA,tierart == "Rind"  | tierart == "Kuh"
 
 # Ergebnisse
 
-In den gemessenen Proben zeigen sich grosse Unterschiede zwischen den einzelnen Messungen. Die Gehalte an Cortison und Hydrocortison sind teilweise unterhalb der Bestimmungsgrenze bis zu Maximalwerten für Cortison von 2887 µg/l und 3940 µg/l in Harnproben.
+In den gemessenen Proben zeigen sich grosse Unterschiede zwischen den einzelnen Messungen. Die Gehalte an Cortison und Hydrocortison sind teilweise unterhalb der Bestimmungsgrenze, die Maximalwerte sind 2887 µg/l Cortison und 3940 µg/l Hydrocortison in Harnproben.
 
-Weiter konnte auch gezeigt werden das Gehalte zwischen den Matrizes sich stark unterscheiden (Siehe @fig-matrixboxcort und @fig-matrixboxhydrocort). Es fällt auf das Cortison vorwiegend in der Matrix Niere und Harn vorkommt, während Hydrocortison in allen Matrizes zu finden ist wobei die Gehalte in der Leber tiefer waren.
+Weiter konnte auch gezeigt werden das sich Gehalte zwischen den Matrizes stark unterscheiden (Siehe @fig-matrixboxcort und @fig-matrixboxhydrocort). Es fällt auf das Cortison vorwiegend in der Matrix Niere und Harn vorkommt, während Hydrocortison in allen Matrizes zu finden ist wobei die Gehalte in der Leber tiefer waren.
 
 Zwischen den Tierarten wurde nur die Matrix Muskel verglichen da von den meisten Tieren nur diese Matrix beprobt wurde (Siehe @fig-tierartboxcort und @fig-tierartboxhydrocort). Dabei hat sich gezeigt, dass bei Schweinen und Fischen höhere Mengen an Cortison gefunden werden, während bei Tieren der Rindergattung nur wenige Proben Werte über der Bestimmungsgrenze aufweisen. In 99 % aller Muskelproben wurde Hydrocortison nachgewiesen (Siehe @tbl-TblHydrocortisonMatrix).
 
@@ -761,7 +761,7 @@ ggplot(harn_ohne_minor, mapping = aes(
 
 # Schlussfolgerung
 
-Zwischen den verschiedenen Matrizes gibt es teilweise grosse Unterschiede (Siehe @tbl-TblCortisonMatrix und @tbl-TblHydrocortisonMatrix. In Nieren wurden hohe Werte Cortison gemessen dafür weniger Hydrocortison. In Lebern wurden nur wenig Cortison und Hydrocortison gefunden. In den meisten Muskelproben wurde Hydrocortison nachgewiesen (Siehe @fig-muskelhisthydrocort).
+Zwischen den verschiedenen Matrizes gibt es teilweise grosse Unterschiede (Siehe @tbl-TblCortisonMatrix und @tbl-TblHydrocortisonMatrix). In Nieren wurden hohe Werte Cortison gemessen dafür weniger Hydrocortison. In Lebern wurden nur wenig Cortison und Hydrocortison gefunden. In den meisten Muskelproben wurde Hydrocortison nachgewiesen (Siehe @tbl-muskelhydrocort).
 
 Die Menge an gefundenem Cortison und Hydrocortison scheint von der Tierart abhängig zu sein (Siehe @fig-tierartboxcort und @fig-tierartboxhydrocort). In Muskelproben von Schweinen wird deutlich mehr Cortison gemessen als in Proben von Tieren der Rindergattung. Auch in Fischmuskel wurde mehr Cortison gemessen jedoch ist die Probenanzahl von 20 zu klein um eine Aussage zutreffen.
 
@@ -772,6 +772,10 @@ Eine Jahreszeitliche Abhängigkeit der Hydrocortison Werte konnte nicht eindutig
 Aufgrund des natürlichen Vorkommens von Cortison und Hydrocortison bietet sich die Möglichkeit diese Substanzen für die Kontrolle der Analysemethode zu verwenden.
 
 In Muskelproben von Säugetieren wurden in 99 % aller Proben, Hydrocortison über der Bestimmungsgrenze gemessen (Siehe @fig-muskelhisthydrocort). Muskelproben, welche kein Hydrocortison enthalten sollten genau geprüft und gegebenenfalls nochmals gemessen werden.
+
+### Beruteilungkriterien
+
+Aufgrund der hohen Streuung innerhalb der einzelne Matrizes und zwischen den verschiedenen Tierarten kann nach erster Analyse noch kein Beurteilungkriterium abgeleitet werden. Weiter müssten genauere Angaben zu den einzelen Tieren (Alter, Geschlecht, Ernährung usw.) vorhanden sein um Abweichungen von normalen Gehalten zu erklären. Es ist jedoch angebracht sehr tiefe (\< Bestimmungsgrenze) und sehr hohe Werte näher zu untersuchen.
 
 ```{r}
 #| eval: false
