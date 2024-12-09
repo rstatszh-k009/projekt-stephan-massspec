@@ -10,17 +10,17 @@
 
 ## Daten
 
-- Im Rahmen des Nationalen Fremdstoffuntersuchungs Programm (NFUP) wurden in Proben von tierischen Lebensmitteln die Rückstände von Cortison und Hydrocortison gemessen. Die Messung der Substanzen erfolgte mittels Flüssigchromatograghie (LC) gekoppelt mit hochauflösender Massenspektrometrie (HRMS)[@kaufmann2020],[@kaufmann2019]. Dabei werden zwischen 45 und 200 Tierarzneimittel quantifiziert.
+- Im Rahmen des Nationalen Fremdstoffuntersuchungs Programm (NFUP) wurden in Proben von tierischen Lebensmitteln die Rückstände von Cortison und Hydrocortison gemessen. Die Messung der Substanzen erfolgte mittels Flüssigchromatograghie (LC) gekoppelt mit hochauflösender Massenspektrometrie (HRMS)[@kaufmann2020], [@kaufmann2019]. Dabei werden zwischen 45 und 200 Tierarzneimittel quantifiziert.
 
 Cortison und Hydrocortison kommen natürlich in Produkten tierischer Herkunft vor. Für die Substanzen gibt es ausser für Milch keine Grenzwerte oder sonstige Beurteilungskriterien.
 
-Mit der folgenden Datenanalyse soll gezeit werden ob sich von den gemessenen Konzentrationen ein Beurteilungskriterium ableiten lässt oder ob die Substanzen als Positivkontrolle für die Methode verwendet werden können.
+Mit der folgenden Datenanalyse soll gezeigt werden, ob sich von den gemessenen Konzentrationen ein Beurteilungskriterium ableiten lässt oder ob die Substanzen als Positivkontrolle für die Methode verwendet werden können.
 
 Die Daten wurden zwischen 2019 bis 2024 erhoben.
 
 ### `daten/raw/`
 
-Hier sind die Rohdaten abegelegt welche mittels eines Skript zu bereinigten Daten umgewandelt wurden. 
+Hier sind die Rohdaten abgelegt, welche mittels eines Skript, zu bereinigten Daten umgewandelt wurden.
 
 ### `daten/processed/`
 
@@ -32,7 +32,9 @@ Hier sind die bereinigten Rohdaten zu finden.
 
 Vielen Dank an folgende Personen die mitgewirkt haben: 
 
-[@larnsce](https://github.com/larnsce) (Für die Messungen der Daten: Kathryn Maden, Mirjam Widmer, Nina Opplier, Patrick Butcher, Jan Gattiker, Robin Kämpf)
+[@larnsce](https://github.com/larnsce)
+
+Für die Messungen der Proben: Kathryn Maden, Mirjam Widmer, Nina Oppliger, Patrick Butcher, Jan Gattiker, Robin Kämpf
 
 ## Kontakt
 

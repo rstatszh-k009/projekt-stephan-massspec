@@ -1,6 +1,6 @@
 ---
 title: "Cortison- und Hydrocortisongehalte in Proben tierischen Ursprungs"
-subtitle: "Datenauswertung von im Rahmen des Nationalen Fremdstoffuntersuchungs Programm gemessenen Proben"
+subtitle: "Datenauswertung von im Rahmen des Nationalen Fremdstoffuntersuchungs Programm gemessenen Proben."
 date: 12.10.2024
 format: 
   html:
@@ -17,9 +17,9 @@ bibliography: references.bib
 
 # Einleitung
 
-Im Rahmen des Nationalen Fremdstoffuntersuchungs Programm (NFUP) wurden in Proben von tierischem Ursprung die Rückstände von Cortison und Hydrocortison gemessen. Die Messung der Substanzen erfolgte mittels Flüssigchromatograghie (LC) gekoppelt mit hochauflösender Massenspektrometrie (HRMS)[@kaufmann2019],[@kaufmann2020]. Dabei wurden zwischen 45 und 200 Tierarzneimittel quantifiziert.
+Im Rahmen des Nationalen Fremdstoffuntersuchungs Programm (NFUP) wurden in Proben von tierischem Ursprung die Rückstände von Cortison und Hydrocortison gemessen. Die Messung der Substanzen erfolgte mittels Flüssigchromatograghie (LC) gekoppelt mit hochauflösender Massenspektrometrie (HRMS)[@kaufmann2019], [@kaufmann2020]. Dabei wurden zwischen 45 und 200 Tierarzneimittel quantifiziert.
 
-Cortison und Hydrocortison kommen natürlich in Gwebe und Ausscheidungen von Tieren vor, <https://de.wikipedia.org/wiki/Cortison>. Für die Substanzen gibt es ausser für Milch keine Grenzwerte oder sonstige Beurteilungskriterien.
+Cortison und Hydrocortison kommen natürlich in Gewebe und Ausscheidungen von Tieren vor, <https://de.wikipedia.org/wiki/Cortison>. Für die Substanzen gibt es ausser für Milch keine Grenzwerte oder sonstige Beurteilungskriterien.
 
 Mit der folgenden Datenanalyse soll gezeigt werden, ob sich von den gemessenen Konzentrationen ein Beurteilungskriterium ableiten lässt oder ob die Substanzen als Positivkontrolle für die Methode verwendet werden können.
 
@@ -773,9 +773,9 @@ Aufgrund des natürlichen Vorkommens von Cortison und Hydrocortison bietet sich 
 
 In Muskelproben von Säugetieren wurden in 99 % aller Proben, Hydrocortison über der Bestimmungsgrenze gemessen (Siehe @fig-muskelhisthydrocort). Muskelproben, welche kein Hydrocortison enthalten sollten genau geprüft und gegebenenfalls nochmals gemessen werden.
 
-### Beruteilungkriterien
+### **Beurteilungskriterien**
 
-Aufgrund der hohen Streuung innerhalb der einzelne Matrizes und zwischen den verschiedenen Tierarten kann nach erster Analyse noch kein Beurteilungkriterium abgeleitet werden. Weiter müssten genauere Angaben zu den einzelen Tieren (Alter, Geschlecht, Ernährung usw.) vorhanden sein um Abweichungen von normalen Gehalten zu erklären. Es ist jedoch angebracht sehr tiefe (\< Bestimmungsgrenze) und sehr hohe Werte näher zu untersuchen.
+Aufgrund der hohen Streuung innerhalb der einzelnen Matrizes und zwischen den verschiedenen Tierarten kann nach erster Analyse der Daten noch kein Beurteilungskriterium abgeleitet werden. Weiter müssten genauere Angaben zu den einzelnen Tieren (Alter, Geschlecht, Ernährung, Gesundheit usw.) vorhanden sein, um Abweichungen zu erklären. Es ist jedoch angebracht sehr tiefe (\< Bestimmungsgrenze) und sehr hohe Werte, z.B mehr als 100 µg/kg in Muskel, näher zu untersuchen.
 
 ```{r}
 #| eval: false
